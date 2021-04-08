@@ -2,4 +2,5 @@ TEMPLATE = subdirs
 
 SUBDIRS += \
     server \
-    desktop
+    desktop \
+    common
