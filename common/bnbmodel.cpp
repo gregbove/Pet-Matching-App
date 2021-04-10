@@ -4,3 +4,8 @@ BNBModel::BNBModel()
 {
 
 }
+
+bool BNBModel::isValid() const
+{
+    return validation().isEmpty();
+}
