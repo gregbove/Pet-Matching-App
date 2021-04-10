@@ -18,7 +18,6 @@ public:
     virtual void fromJson(const QJsonObject & obj);
     virtual void toJson(QJsonObject & obj) const;
 
-    virtual bool isValid() const;
     virtual QString validation() const;
 
     QString getUsername() const;

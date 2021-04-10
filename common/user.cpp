@@ -31,14 +31,20 @@ void User::toJson(QJsonObject &obj) const
     obj[CREATED_AT] = createdAt.toSecsSinceEpoch();
 }
 
-bool User::isValid() const
-{
-    return false;
-}
-
 QString User::validation() const
 {
-    return QString();
+    QString v;
+
+    if (username.isEmpty())
+        v += "username must not be empty\n";
+
+    if (password.isEmpty())
+        v += "password must not be empty\n";
+
+    if (!createdAt.isValid())
+        v += "createdAt must be a valid date-time";
+
+    return v;
 }
 
 // === Getters and Setters ===
