@@ -9,6 +9,16 @@
 
 using namespace std;
 
+/**
+ * @brief A user of the Bread-N-Butter application
+ *
+ * User objects should be stored in JSON in the folowing form:
+ * {
+ *      "username": "SomeUser", (should be unique)
+ *      "password": "$omePassw0rd", (should be non-empty)
+ *      "createdAt": 1618089764 (number of seconds since Unix Epoch)
+ * }
+ */
 class User : public BNBModel
 {
 public:
