@@ -11,6 +11,10 @@ using namespace std;
 int main()
 {
     User * user1 = new User();
+
+    cout << user1->isValid() << endl;
+    cout << user1->validation().toStdString() << endl;
+
     user1->setUsername("Womp");
     user1->setPassword("thwompthwomp");
 
