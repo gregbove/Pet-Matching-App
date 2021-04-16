@@ -8,10 +8,12 @@ SOURCES += main.cpp \
     bnbmodel.cpp \
     user.cpp \
     bnbresponse.cpp \
-    jsonserializable.cpp
+    jsonserializable.cpp \
+    parent.cpp
 
 HEADERS += \
     bnbmodel.h \
     user.h \
     bnbresponse.h \
-    jsonserializable.h
+    jsonserializable.h \
+    parent.h
