@@ -42,7 +42,7 @@ QString User::validation() const
         v += "password must not be empty\n";
 
     if (!createdAt.isValid())
-        v += "createdAt must be a valid date-time";
+        v += "createdAt must be a valid date-time\n";
 
     return v;
 }
