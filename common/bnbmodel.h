@@ -32,6 +32,12 @@ public:
      * errors are found, this method shallll return an empty QString.
      */
     virtual QString validation() const = 0;
+
+    int getId() const;
+    void setId(int value);
+
+protected:
+    int id;
 };
 
 #endif // BNBMODEL_H
