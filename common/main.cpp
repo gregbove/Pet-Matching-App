@@ -5,6 +5,7 @@
 #include <QJsonDocument>
 
 #include "user.h"
+#include "bnbresponse.h"
 
 using namespace std;
 
@@ -27,8 +28,20 @@ int main()
     QJsonObject * userJson2 = new QJsonObject();
     user2->toJson(* userJson2);
 
-    QJsonDocument * doc1 = new QJsonDocument(* userJson1);
-    QJsonDocument * doc2 = new QJsonDocument(* userJson2);
+    BNBResponse * res1 = new BNBResponse();
+    res1->setResult(* userJson1);
+
+    QJsonObject * resJson1 = new QJsonObject();
+    res1->toJson(* resJson1);
+
+    BNBResponse * res2 = new BNBResponse();
+    res2->fromJson(* resJson1);
+
+    QJsonObject * resJson2 = new QJsonObject();
+    res2->toJson(* resJson2);
+
+    QJsonDocument * doc1 = new QJsonDocument(* resJson1);
+    QJsonDocument * doc2 = new QJsonDocument(* resJson2);
 
     cout << doc1->toJson().toStdString() << endl;
     cout << doc2->toJson().toStdString() << endl;

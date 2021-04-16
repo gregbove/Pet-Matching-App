@@ -6,8 +6,12 @@ CONFIG -= app_bundle
 
 SOURCES += main.cpp \
     bnbmodel.cpp \
-    user.cpp
+    user.cpp \
+    bnbresponse.cpp \
+    jsonserializable.cpp
 
 HEADERS += \
     bnbmodel.h \
-    user.h
+    user.h \
+    bnbresponse.h \
+    jsonserializable.h
