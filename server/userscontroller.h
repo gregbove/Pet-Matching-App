@@ -1,8 +1,12 @@
 #ifndef USERSCONTROLLER_H
 #define USERSCONTROLLER_H
 
-#include "bnbcontroller.h"
 #include "../common/bnbresponse.h"
+#include "../common/parent.h"
+
+#include "bnbcontroller.h"
+
+#include <iostream>
 
 #include <memory>
 #include <restbed>
@@ -21,7 +25,8 @@ public:
     void addToResource(const shared_ptr<Resource>);
 
 protected:
-    void getIndexHandler(const shared_ptr<Session> session);
+    void getHandler(const shared_ptr<Session> session);
+    void postHandler(const shared_ptr<Session> session);
 
 };
 

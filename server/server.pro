@@ -20,10 +20,16 @@ SOURCES += main.cpp \
     defaultcontroller.cpp \
     userscontroller.cpp \
     bnbcontroller.cpp \
-    ../common/bnbresponse.cpp
+    ../common/bnbresponse.cpp \
+    ../common/bnbmodel.cpp \
+    ../common/user.cpp \
+    ../common/parent.cpp
 
 HEADERS += \
     defaultcontroller.h \
     userscontroller.h \
     bnbcontroller.h \
-    ../common/bnbresponse.h
+    ../common/bnbresponse.h \
+    ../common/bnbmodel.h \
+    ../common/user.cpp \
+    ../common/parent.h
