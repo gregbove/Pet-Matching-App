@@ -17,7 +17,13 @@ DEPENDPATH += $$PWD/../libs/x64-linux/include
 unix:!macx: PRE_TARGETDEPS += $$PWD/../libs/x64-linux/lib/librestbed.a
 
 SOURCES += main.cpp \
-    defaultcontroller.cpp
+    defaultcontroller.cpp \
+    userscontroller.cpp \
+    bnbcontroller.cpp \
+    ../common/bnbresponse.cpp
 
 HEADERS += \
-    defaultcontroller.h
+    defaultcontroller.h \
+    userscontroller.h \
+    bnbcontroller.h \
+    ../common/bnbresponse.h

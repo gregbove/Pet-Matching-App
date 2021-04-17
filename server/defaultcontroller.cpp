@@ -1,23 +1,15 @@
 #include "defaultcontroller.h"
 
-DefaultController::DefaultController(string baseUrl)
+void DefaultController::addToResource(const shared_ptr<Resource> res)
 {
-    this->baseUrl = baseUrl;
-}
+    set<string> pathList = {
+        (baseUrl + "/").toStdString()
+    };
 
-shared_ptr<Resource> DefaultController::getResource()
-{
-    set<string> pathList = set<string>({
-                                           baseUrl + "/"
-                                       });
-
-    shared_ptr<Resource> resource = make_shared<Resource>();
-    resource->set_paths(pathList);
-    resource->set_method_handler("GET", std::bind(
-                                     &DefaultController::getIndexHandler,
-                                     this, std::placeholders::_1));
-
-    return resource;
+    res->set_paths(pathList);
+    res->set_method_handler("GET", std::bind(
+                                &DefaultController::getIndexHandler,
+                                this, std::placeholders::_1));
 }
 
 void DefaultController::getIndexHandler(const shared_ptr<Session> session)

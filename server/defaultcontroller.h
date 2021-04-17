@@ -6,21 +6,21 @@
 #include <QJsonObject>
 #include <QJsonDocument>
 
+#include "bnbcontroller.h"
+
 using namespace std;
 using namespace restbed;
 
-class DefaultController
+class DefaultController : public BNBController
 {
 public:
-    DefaultController(string baseUrl = string(""));
-    virtual ~DefaultController() {};
-    shared_ptr<Resource> getResource();
+    DefaultController(QString baseUrl = "") : BNBController(baseUrl) {};
+
+    void addToResource(const shared_ptr<Resource>);
 
 protected:
     void getIndexHandler(const shared_ptr<Session> session);
 
-private:
-    string baseUrl;
 };
 
 #endif // DEFAULTCONTROLLER_H
