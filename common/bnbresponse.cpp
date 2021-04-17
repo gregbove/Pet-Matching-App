@@ -14,11 +14,10 @@ void BNBResponse::fromJson(const QJsonObject &j)
     QString statusStr = j[STATUS].toString();
 
     if (statusStr == STATUS_OK
-            && j.contains(RESULT)
-            && j[RESULT].isObject())
+            && j.contains(RESULT))
     {
         status = OK;
-        result = j[RESULT].toObject();
+        result = j[RESULT];
     }
     else if (statusStr == STATUS_FAIL
              && j.contains(ERROR)
@@ -53,7 +52,7 @@ BNBResponseStatus BNBResponse::getStatus() const
     return status;
 }
 
-QJsonObject BNBResponse::getResult() const
+QJsonValue BNBResponse::getResult() const
 {
     if (status != OK)
         throw "No result; status not OK";
@@ -61,7 +60,7 @@ QJsonObject BNBResponse::getResult() const
     return result;
 }
 
-void BNBResponse::setResult(const QJsonObject &value)
+void BNBResponse::setResult(const QJsonValue &value)
 {
     status = OK;
     result = value;

@@ -3,6 +3,7 @@
 
 #include <QString>
 #include <QJsonObject>
+#include <QJsonValue>
 
 #include "jsonserializable.h"
 
@@ -23,8 +24,8 @@ public:
     BNBResponseStatus getStatus() const;
     void setStatus(const BNBResponseStatus &value);
 
-    QJsonObject getResult() const;
-    void setResult(const QJsonObject &value);
+    QJsonValue getResult() const;
+    void setResult(const QJsonValue &value);
 
     QString getError() const;
     void setError(const QString &value);
@@ -37,7 +38,7 @@ protected:
     static constexpr const char* STATUS_FAIL = "fail";
 
     BNBResponseStatus status;
-    QJsonObject result;
+    QJsonValue result;
     QString error;
 };
 
