@@ -15,7 +15,7 @@ public:
 
     virtual QString validation() const;
 
-    User getUser() const;
+    User & getUser();
     void setUser(const User &value);
 
     QString getName() const;

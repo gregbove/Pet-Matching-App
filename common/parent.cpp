@@ -34,7 +34,7 @@ QString Parent::validation() const
     return v;
 }
 
-User Parent::getUser() const
+User & Parent::getUser()
 {
     return user;
 }
