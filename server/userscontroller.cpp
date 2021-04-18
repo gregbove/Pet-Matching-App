@@ -17,12 +17,6 @@ void UsersController::addToResource(const shared_ptr<Resource> res)
 
 void UsersController::getHandler(const shared_ptr<Session> session)
 {
-    const QJsonObject user1
-    {
-        { "username", "bonk" },
-        { "password", "hunter2" }
-    };
-
     QJsonArray users = {
         QJsonObject {
             { "username", "bonk" },
@@ -50,7 +44,6 @@ void UsersController::getHandler(const shared_ptr<Session> session)
 
 void UsersController::postHandler(const shared_ptr<Session> session)
 {
-    const auto request = session->get_request( );
     size_t contentLen = session->get_request()->get_header("Content-Length", 0);
 
     BNBResponse res;
@@ -63,20 +56,35 @@ void UsersController::postHandler(const shared_ptr<Session> session)
         QJsonParseError parseError;
         QJsonDocument reqBody = QJsonDocument::fromJson(reqBytes, &parseError);
 
-        if (!reqBody.isNull())
+        if (reqBody.isObject())
         {
-            Parent parent;
-            parent.fromJson(reqBody.object());
+            BNBRequest req;
+            req.fromJson(reqBody.object());
 
+            BNBModel * model = nullptr;
+            QString type = req.getType();
             QDateTime now = QDateTime::currentDateTimeUtc();
-            parent.getUser().setCreatedAt(now);
+            QString error;
+            if (type == "parent")
+            {
+                Parent * p = new Parent();
+                p->fromJson(req.getPayload().toObject());
+                p->getUser().setCreatedAt(now);
+                model = p;
+            }
+            else
+            {
+                error = "Invalid type";
+            }
 
-            QString error = parent.validation();
+            if (model != nullptr)
+                error = model->validation();
+
             if (error.isEmpty())
             {
-                QJsonObject parentObj;
-                parent.toJson(parentObj);
-                res.setResult(parentObj);
+                QJsonObject mObj;
+                model->toJson(mObj);
+                res.setResult(mObj);
                 statusCode = restbed::CREATED;
             }
             else
@@ -84,10 +92,18 @@ void UsersController::postHandler(const shared_ptr<Session> session)
                 res.setError(error);
                 statusCode = restbed::BAD_REQUEST;
             }
+
+            if (model != nullptr)
+                delete model;
+        }
+        else if (reqBody.isNull())
+        {
+            res.setError(parseError.errorString());
+            statusCode = restbed::BAD_REQUEST;
         }
         else
         {
-            res.setError(parseError.errorString());
+            res.setError("Request body must be an object");
             statusCode = restbed::BAD_REQUEST;
         }
 

@@ -2,11 +2,10 @@
 #define USERSCONTROLLER_H
 
 #include "../common/bnbresponse.h"
+#include "../common/bnbrequest.h"
 #include "../common/parent.h"
 
 #include "bnbcontroller.h"
-
-#include <iostream>
 
 #include <memory>
 #include <restbed>

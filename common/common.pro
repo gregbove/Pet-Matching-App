@@ -9,11 +9,13 @@ SOURCES += main.cpp \
     user.cpp \
     bnbresponse.cpp \
     jsonserializable.cpp \
-    parent.cpp
+    parent.cpp \
+    bnbrequest.cpp
 
 HEADERS += \
     bnbmodel.h \
     user.h \
     bnbresponse.h \
     jsonserializable.h \
-    parent.h
+    parent.h \
+    bnbrequest.h

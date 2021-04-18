@@ -18,18 +18,20 @@ unix:!macx: PRE_TARGETDEPS += $$PWD/../libs/x64-linux/lib/librestbed.a
 
 SOURCES += main.cpp \
     defaultcontroller.cpp \
-    userscontroller.cpp \
     bnbcontroller.cpp \
     ../common/bnbresponse.cpp \
     ../common/bnbmodel.cpp \
     ../common/user.cpp \
-    ../common/parent.cpp
+    ../common/parent.cpp \
+    ../common/bnbrequest.cpp \
+    userscontroller.cpp
 
 HEADERS += \
     defaultcontroller.h \
-    userscontroller.h \
     bnbcontroller.h \
     ../common/bnbresponse.h \
     ../common/bnbmodel.h \
     ../common/user.cpp \
-    ../common/parent.h
+    ../common/parent.h \
+    ../common/bnbrequest.cpp \
+    userscontroller.h
