@@ -7,6 +7,15 @@
 
 #include "jsonserializable.h"
 
+/**
+ * @brief A request sent as a POST body to the BNB server
+ *
+ * Requests look like this as JSON:
+ * {
+ *   "type": "some-string",       the type of the payload (arbitrary)
+ *   "payload": <some JSON value> usually an object; decided by the type
+ * }
+ */
 class BNBRequest : public JSONSerializable
 {
 public:
