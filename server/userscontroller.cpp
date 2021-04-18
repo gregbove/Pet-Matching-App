@@ -3,7 +3,9 @@
 void UsersController::addToResource(const shared_ptr<Resource> res)
 {
     set<string> pathList = {
-        (baseUrl + "/").toStdString()
+//        (baseUrl + "/").toStdString(),
+        (baseUrl + "/{type: [a-z]+}").toStdString(),
+        (baseUrl + "/{id: [0-9]+}").toStdString()
     };
 
     res->set_paths(pathList);
@@ -45,6 +47,7 @@ void UsersController::getHandler(const shared_ptr<Session> session)
 void UsersController::postHandler(const shared_ptr<Session> session)
 {
     size_t contentLen = session->get_request()->get_header("Content-Length", 0);
+    string modelType = session->get_request()->get_path_parameter(TYPE);
 
     BNBResponse res;
     int statusCode = restbed::INTERNAL_SERVER_ERROR;
@@ -59,13 +62,14 @@ void UsersController::postHandler(const shared_ptr<Session> session)
         if (reqBody.isObject())
         {
             BNBRequest req;
+            req.setType(QString::fromStdString(modelType));
             req.fromJson(reqBody.object());
 
             BNBModel * model = nullptr;
             QString type = req.getType();
             QDateTime now = QDateTime::currentDateTimeUtc();
             QString error;
-            if (type == "parent")
+            if (type.startsWith("parent"))
             {
                 Parent * p = new Parent();
                 p->fromJson(req.getPayload().toObject());
