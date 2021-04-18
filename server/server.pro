@@ -1,4 +1,4 @@
-QT += core
+QT += core sql
 
 TARGET = server
 TEMPLATE = app
@@ -24,7 +24,8 @@ SOURCES += main.cpp \
     ../common/user.cpp \
     ../common/parent.cpp \
     ../common/bnbrequest.cpp \
-    userscontroller.cpp
+    userscontroller.cpp \
+    db.cpp
 
 HEADERS += \
     defaultcontroller.h \
@@ -34,4 +35,5 @@ HEADERS += \
     ../common/user.cpp \
     ../common/parent.h \
     ../common/bnbrequest.cpp \
-    userscontroller.h
+    userscontroller.h \
+    db.h

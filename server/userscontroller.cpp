@@ -19,19 +19,17 @@ void UsersController::addToResource(const shared_ptr<Resource> res)
 
 void UsersController::getHandler(const shared_ptr<Session> session)
 {
-    QJsonArray users = {
-        QJsonObject {
-            { "username", "bonk" },
-            { "password", "hunter2" }
-        },
-        QJsonObject {
-            { "username", "squee" },
-            { "password", "pizza_party_2010" }
-        }
-    };
+    Db * db = Db::instance();
+
+    QJsonArray parents;
+    db->foreachParent([&parents](Parent & p) {
+        QJsonObject o;
+        p.toJson(o);
+        parents.append(o);
+    });
 
     BNBResponse res;
-    res.setResult(users);
+    res.setResult(parents);
 
     QJsonObject resObj;
     res.toJson(resObj);

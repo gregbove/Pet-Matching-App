@@ -6,6 +6,7 @@
 #include "../common/parent.h"
 
 #include "bnbcontroller.h"
+#include "db.h"
 
 #include <memory>
 #include <restbed>
