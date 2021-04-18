@@ -3,6 +3,10 @@
 
 #include <QJsonObject>
 
+/**
+ * @brief An abstract parent class representing objects
+ * that can be serialized and deserialized from JSON.
+ */
 class JSONSerializable
 {
 public:
