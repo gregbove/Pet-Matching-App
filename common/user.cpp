@@ -14,6 +14,8 @@ User::~User()
 
 void User::fromJson(const QJsonObject &j)
 {
+    BNBModel::fromJson(j); // BNBModel must add the id
+
     if (j.contains(USERNAME) && j[USERNAME].isString())
         username = j[USERNAME].toString();
 
@@ -24,11 +26,13 @@ void User::fromJson(const QJsonObject &j)
         createdAt.setSecsSinceEpoch(j[CREATED_AT].toInt());
 }
 
-void User::toJson(QJsonObject &obj) const
+void User::toJson(QJsonObject &j) const
 {
-    obj[USERNAME] = username;
-    obj[PASSWORD] = password;
-    obj[CREATED_AT] = createdAt.toSecsSinceEpoch();
+    BNBModel::toJson(j); // BNBModel must add the id
+
+    j[USERNAME] = username;
+    j[PASSWORD] = password;
+    j[CREATED_AT] = createdAt.toSecsSinceEpoch();
 }
 
 QString User::validation() const

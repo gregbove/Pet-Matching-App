@@ -8,6 +8,8 @@ Parent::Parent()
 
 void Parent::fromJson(const QJsonObject &j)
 {
+    BNBModel::fromJson(j); // BNBModel must add the id
+
     if (j.contains(USER) && j[USER].isObject())
         user.fromJson(j[USER].toObject());
 
@@ -17,6 +19,8 @@ void Parent::fromJson(const QJsonObject &j)
 
 void Parent::toJson(QJsonObject &j) const
 {
+    BNBModel::toJson(j); // BNBModel must add the id
+
     QJsonObject userObj;
     user.toJson(userObj);
 

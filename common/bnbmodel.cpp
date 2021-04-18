@@ -5,6 +5,17 @@ BNBModel::BNBModel()
 
 }
 
+void BNBModel::fromJson(const QJsonObject &j)
+{
+    if (j.contains(ID) && j[ID].isDouble())
+            id = j[ID].toInt();
+}
+
+void BNBModel::toJson(QJsonObject &j) const
+{
+    j[ID] = id;
+}
+
 bool BNBModel::isValid() const
 {
     return validation().isEmpty();

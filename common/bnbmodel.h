@@ -2,6 +2,8 @@
 #define BNBMODEL_H
 
 #include <QString>
+#include <QJsonObject>
+#include <QJsonValue>
 
 #include "jsonserializable.h"
 
@@ -15,6 +17,9 @@ class BNBModel : public JSONSerializable
 {
 public:
     BNBModel();
+
+    virtual void fromJson(const QJsonObject & obj);
+    virtual void toJson(QJsonObject & obj) const;
 
     /**
      * @brief Checks if the model meets all of its validation
@@ -33,10 +38,14 @@ public:
      */
     virtual QString validation() const = 0;
 
+    /// Every model has an id. Models should extend BNBModel and therefore
+    /// should not implement their own id (but must serialize it).
     int getId() const;
     void setId(int value);
 
 protected:
+    static constexpr const char* ID = "id";
+
     int id;
 };
 
