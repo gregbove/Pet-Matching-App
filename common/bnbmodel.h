@@ -11,14 +11,30 @@
  * @brief Abstract parent for all data-model classes in Bread-N-Butter
  *
  * This class includes methods (and necessary default implementations)
- * that must be implemented for all models.
+ * that must be implemented for all models. This should also be referenced
+ * for any general documentation pertaining to models.
  */
 class BNBModel : public JSONSerializable
 {
 public:
     BNBModel();
 
+    /**
+     * @brief Load a BNBModel from a JSON Object
+     * @param obj the Object to load from
+     *
+     * This method should be overridden but the overriding method
+     * must call this method in order to deserialize the Model id
+     */
     virtual void fromJson(const QJsonObject & obj);
+
+    /**
+     * @brief Store a BNBModel to a JSON Object
+     * @param obj the Object to save to
+     *
+     * This method should be overridden but the overriding method
+     * must call this method in order to serialize the Model id
+     */
     virtual void toJson(QJsonObject & obj) const;
 
     /**
