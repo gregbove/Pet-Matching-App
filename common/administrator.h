@@ -1,14 +1,14 @@
-#ifndef PARENT_H
-#define PARENT_H
+#ifndef ADMINISTRATOR_H
+#define ADMINISTRATOR_H
 
 #include <QString>
 
 #include "user.h"
 
-class Parent : public BNBModel
+class Administrator : public BNBModel
 {
 public:
-    Parent();
+    Administrator();
 
     virtual void fromJson(const QJsonObject & obj);
     virtual void toJson(QJsonObject & obj) const;
@@ -18,17 +18,15 @@ public:
     User & getUser();
     void setUser(const User &value);
 
-    QString getName() const;
-    void setName(const QString &value);
+    bool getIsSuperAdmin() const;
+    void setIsSuperAdmin(bool value);
 
 private:
     static constexpr const char* USER = "user";
-    static constexpr const char* NAME = "name";
+    static constexpr const char* ISSUPERADMIN = "isSuperAdmin";
 
     User user;
-    QString name;
+    bool isSuperAdmin;
 };
 
-#endif // PARENT_H
-
-
+#endif // ADMINISTRATOR_H

@@ -57,3 +57,5 @@ void Parent::setName(const QString &value)
 {
     name = value;
 }
+
+
