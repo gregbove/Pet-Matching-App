@@ -4,6 +4,7 @@ Pet::Pet()
 {
     petName = QString();
     description = QString();
+    shelterId = 0;
 }
 
 Pet::~Pet()
@@ -18,8 +19,8 @@ void Pet::fromJson(const QJsonObject &j)
     if (j.contains(PETNAME) && j[PETNAME].isString())
         petName = j[PETNAME].toString();
 
-    if (j.contains(SHELTERID) && j[SHELTERID].isString())
-        shelterId = j[SHELTERID].toInt();
+    if (j.contains(SHELTER_ID) && j[SHELTER_ID].isString())
+        shelterId = j[SHELTER_ID].toInt();
 
     if (j.contains(DESCRIPTION) && j[DESCRIPTION].isString())
         description = j[DESCRIPTION].toString();
@@ -40,7 +41,7 @@ void Pet::toJson(QJsonObject &j) const
     shelter->toJson(shelterObj);
 
     j[PETNAME] = petName;
-    j[SHELTERID] = shelterId;
+    j[SHELTER_ID] = shelterId;
     j[DESCRIPTION] = description;
     j[SHELTER] = shelterObj;
 

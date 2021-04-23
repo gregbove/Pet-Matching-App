@@ -5,6 +5,7 @@ ShelterOwner::ShelterOwner()
 {
     user = User();
     name = QString();
+    shelterId = 0;
 }
 
 void ShelterOwner::fromJson(const QJsonObject &j)
@@ -17,8 +18,8 @@ void ShelterOwner::fromJson(const QJsonObject &j)
     if (j.contains(NAME) && j[NAME].isString())
         name = j[NAME].toString();
 
-    if (j.contains(SHELTERID) && j[SHELTERID].isString())
-        shelterId = j[SHELTERID].toInt();
+    if (j.contains(SHELTER_ID) && j[SHELTER_ID].isString())
+        shelterId = j[SHELTER_ID].toInt();
 
     if (j.contains(SHELTER) && j[SHELTER].isObject()){
         Shelter shelterObj;
@@ -40,7 +41,7 @@ void ShelterOwner::toJson(QJsonObject &j) const
 
     j[USER] = userObj;
     j[NAME] = name;
-    j[SHELTERID] = shelterId;
+    j[SHELTER_ID] = shelterId;
     j[SHELTER] = shelterObj;
 }
 

@@ -2,7 +2,9 @@
 
 PetAttribute::PetAttribute()
 {
-
+    petId = 0;
+    attributeId = 0;
+    value = 0;
 }
 
 PetAttribute::~PetAttribute()
@@ -14,11 +16,11 @@ void PetAttribute::fromJson(const QJsonObject &j)
 {
     BNBModel::fromJson(j); // BNBModel must add the id
 
-    if (j.contains(PETID) && j[PETID].isString())
-        petId = j[PETID].toInt();
+    if (j.contains(PET_ID) && j[PET_ID].isString())
+        petId = j[PET_ID].toInt();
 
-    if (j.contains(ATTRIBUTEID) && j[ATTRIBUTEID].isString())
-        attributeId = j[ATTRIBUTEID].toInt();
+    if (j.contains(ATTRIBUTE_ID) && j[ATTRIBUTE_ID].isString())
+        attributeId = j[ATTRIBUTE_ID].toInt();
 
     if (j.contains(VALUE) && j[VALUE].isString())
         value = j[VALUE].toInt();
@@ -47,8 +49,8 @@ void PetAttribute::toJson(QJsonObject &j) const
     QJsonObject attributeObj;
     attribute->toJson(attributeObj);
 
-    j[PETID] = petId;
-    j[ATTRIBUTEID] = attributeId;
+    j[PET_ID] = petId;
+    j[ATTRIBUTE_ID] = attributeId;
     j[VALUE] = value;
     j[PET] = petObj;
     j[ATTRIBUTE] = attributeObj;

@@ -34,8 +34,8 @@ public:
     void setValue(int val);
 
 private:
-    static constexpr const char* PETID = "petId";
-    static constexpr const char* ATTRIBUTEID = "attributeId";
+    static constexpr const char* PET_ID = "petId";
+    static constexpr const char* ATTRIBUTE_ID = "attributeId";
     static constexpr const char* VALUE = "value";
     static constexpr const char* PET = "pet";
     static constexpr const char* ATTRIBUTE = "attribute";

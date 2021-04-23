@@ -3,7 +3,8 @@
 
 ShelterOwnership::ShelterOwnership()
 {
-
+    ownerId = 0;
+    shelterId = 0;
 }
 
 ShelterOwnership::~ShelterOwnership()
@@ -15,11 +16,11 @@ void ShelterOwnership::fromJson(const QJsonObject &j)
 {
     BNBModel::fromJson(j); // BNBModel must add the id
 
-    if (j.contains(SHELTERID) && j[SHELTERID].isString())
-        shelterId = j[SHELTERID].toInt();
+    if (j.contains(SHELTER_ID) && j[SHELTER_ID].isString())
+        shelterId = j[SHELTER_ID].toInt();
 
-    if (j.contains(OWNERID) && j[OWNERID].isString())
-        ownerId = j[OWNERID].toInt();
+    if (j.contains(OWNER_ID) && j[OWNER_ID].isString())
+        ownerId = j[OWNER_ID].toInt();
 
     if (j.contains(OWNER) && j[OWNER].isObject()){
         ShelterOwner shelterOwnerObj;
@@ -44,8 +45,8 @@ void ShelterOwnership::toJson(QJsonObject &j) const
     QJsonObject shelterOwnerObj;
     owner->toJson(shelterOwnerObj);
 
-    j[SHELTERID] = shelterId;
-    j[OWNERID] = ownerId;
+    j[SHELTER_ID] = shelterId;
+    j[OWNER_ID] = ownerId;
     j[SHELTER] = shelterObj;
     j[OWNER] = shelterOwnerObj;
 }

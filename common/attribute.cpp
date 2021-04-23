@@ -4,7 +4,8 @@ Attribute::Attribute()
 {
     name = QString();
     description = QString();
-
+    offset = 0;
+    range = 0;
 }
 
 Attribute::~Attribute()

@@ -33,7 +33,7 @@ public:
 private:
     static constexpr const char* USER = "user";
     static constexpr const char* NAME = "name";
-    static constexpr const char* SHELTERID = "shelterId";
+    static constexpr const char* SHELTER_ID = "shelterId";
     static constexpr const char* SHELTER = "shelter";
 
 

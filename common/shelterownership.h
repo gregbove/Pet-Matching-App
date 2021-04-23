@@ -30,8 +30,8 @@ public:
     void setShelter(const shared_ptr<Shelter> &value);
 
 private:
-    static constexpr const char* OWNERID = "ownerId";
-    static constexpr const char* SHELTERID = "shelterId";
+    static constexpr const char* OWNER_ID = "ownerId";
+    static constexpr const char* SHELTER_ID = "shelterId";
     static constexpr const char* OWNER = "owner";
     static constexpr const char* SHELTER = "shelter";
 

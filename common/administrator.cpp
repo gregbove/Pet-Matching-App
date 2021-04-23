@@ -4,6 +4,7 @@
 Administrator::Administrator()
 {
     user = User();
+    isSuperAdmin = false;
 }
 
 void Administrator::fromJson(const QJsonObject &j)

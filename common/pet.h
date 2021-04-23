@@ -37,7 +37,7 @@ public:
 
 protected:
     static constexpr const char* PETNAME = "petName";
-    static constexpr const char* SHELTERID = "shelterId";
+    static constexpr const char* SHELTER_ID = "shelterId";
     static constexpr const char* SHELTER = "shelter";
     static constexpr const char* DESCRIPTION = "description";
 
