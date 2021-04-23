@@ -5,8 +5,6 @@ ShelterOwner::ShelterOwner()
 {
     user = User();
     name = QString();
-    shelterID = QString();
-    ownerID = QString();
 }
 
 void ShelterOwner::fromJson(const QJsonObject &j)
@@ -20,10 +18,14 @@ void ShelterOwner::fromJson(const QJsonObject &j)
         name = j[NAME].toString();
 
     if (j.contains(SHELTERID) && j[SHELTERID].isString())
-        shelterID = j[SHELTERID].toString();
+        shelterId = j[SHELTERID].toInt();
 
-    if (j.contains(OWNERID) && j[OWNERID].isString())
-        shelterID = j[OWNERID].toString();
+    if (j.contains(SHELTER) && j[SHELTER].isObject()){
+        Shelter shelterObj;
+        shelterObj.fromJson(j[SHELTER].toObject());
+        shelter = make_shared< Shelter >( shelterObj );
+    }
+
 }
 
 void ShelterOwner::toJson(QJsonObject &j) const
@@ -33,10 +35,13 @@ void ShelterOwner::toJson(QJsonObject &j) const
     QJsonObject userObj;
     user.toJson(userObj);
 
+    QJsonObject shelterObj;
+    shelter->toJson(shelterObj);
+
     j[USER] = userObj;
     j[NAME] = name;
-    j[SHELTERID] = shelterID;
-    j[OWNERID] = ownerID;
+    j[SHELTERID] = shelterId;
+    j[SHELTER] = shelterObj;
 }
 
 QString ShelterOwner::validation() const
@@ -46,15 +51,17 @@ QString ShelterOwner::validation() const
     if (name.isEmpty())
         v += "name must not be empty\n";
 
-    if (shelterID.isEmpty())
-        v += "Shelter ID must not be empty\n";
+    if (shelterId <= 0)
+        v += "Shelter ID must not be negative or zero\n";
 
-    if (ownerID.isEmpty())
-        v += "Owner ID must not be empty\n";
+    if (shelter == nullptr)
+        v += "shelter must not be null\n";
 
     return v;
 }
 
+
+//
 User & ShelterOwner::getUser()
 {
     return user;
@@ -75,22 +82,24 @@ void ShelterOwner::setName(const QString &value)
     name = value;
 }
 
-QString ShelterOwner::getShelterID() const
+int ShelterOwner::getShelterId() const
 {
-    return shelterID;
+    return shelterId;
 }
 
-void ShelterOwner::setShelterID(const QString &value)
+void ShelterOwner::setShelterId(int value)
 {
-    shelterID = value;
+    shelterId = value;
 }
 
-QString ShelterOwner::getOwnerID() const
+shared_ptr<Shelter> ShelterOwner::getShelter() const
 {
-    return ownerID;
+    return shelter;
 }
 
-void ShelterOwner::setOwnerID(const QString &value)
+void ShelterOwner::setShelter(const shared_ptr<Shelter> &value)
 {
-    ownerID = value;
+    shelter = value;
 }
+
+

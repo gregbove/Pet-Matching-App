@@ -14,7 +14,7 @@ class Attribute : public BNBModel
 {
 public:
     Attribute();
-     ~Attribute();
+    ~Attribute();
 
     void fromJson(const QJsonObject & obj);
     void toJson(QJsonObject & obj) const;
@@ -22,18 +22,17 @@ public:
     QString validation() const;
 
 
-
-    QString getRange() const;
-    void setRange(const QString &value);
-
-    QString getOffset() const;
-    void setOffset(const QString &value);
-
     QString getDescription() const;
     void setDescription(const QString &value);
 
     QString getName() const;
     void setName(const QString &value);
+
+    int getOffset() const;
+    void setOffset(int value);
+
+    int getRange() const;
+    void setRange(int value);
 
 protected:
     static constexpr const char* RANGE = "range";
@@ -43,8 +42,8 @@ protected:
 
     QString name;
     QString description;
-    QString offset;
-    QString range;
+    int offset;
+    int range;
 };
 
 #endif // ATTRIBUTE_H

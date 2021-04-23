@@ -2,7 +2,9 @@
 #define PETATTRIBUTE_H
 
 #include <QString>
+#include "attribute.h"
 #include "bnbmodel.h"
+#include "pet.h"
 
 class PetAttribute : public BNBModel
 {
@@ -16,25 +18,33 @@ public:
 
     QString validation() const;
 
+    int getPetId() const;
+    void setPetId(int value);
 
+    shared_ptr<Pet> getPet() const;
+    void setPet(const shared_ptr<Pet> &value);
 
-    QString getPetID() const;
-    void setPetID(const QString &value);
+    int getAttributeId() const;
+    void setAttributeId(int value);
 
-    QString getAttributeID() const;
-    void setAttributeID(const QString &value);
+    shared_ptr<Attribute> getAttribute() const;
+    void setAttribute(const shared_ptr<Attribute> &value);
 
-    QString getValue() const;
-    void setValue(const QString &value);
+    int getValue() const;
+    void setValue(int val);
 
 private:
-    static constexpr const char* PETID = "petID";
-    static constexpr const char* ATTRIBUTEID = "attributeID";
+    static constexpr const char* PETID = "petId";
+    static constexpr const char* ATTRIBUTEID = "attributeId";
     static constexpr const char* VALUE = "value";
+    static constexpr const char* PET = "pet";
+    static constexpr const char* ATTRIBUTE = "attribute";
 
-    QString petID;
-    QString attributeID;
-    QString value;
+    int petId;
+    shared_ptr<Pet> pet;
+    int attributeId;
+    shared_ptr<Attribute> attribute;
+    int value;
 };
 
 

@@ -2,9 +2,7 @@
 
 PetAttribute::PetAttribute()
 {
-    petID = QString();
-    attributeID = QString();
-    value = QString();
+
 }
 
 PetAttribute::~PetAttribute()
@@ -17,64 +15,117 @@ void PetAttribute::fromJson(const QJsonObject &j)
     BNBModel::fromJson(j); // BNBModel must add the id
 
     if (j.contains(PETID) && j[PETID].isString())
-        petID = j[PETID].toString();
+        petId = j[PETID].toInt();
+
     if (j.contains(ATTRIBUTEID) && j[ATTRIBUTEID].isString())
-        attributeID = j[ATTRIBUTEID].toString();
+        attributeId = j[ATTRIBUTEID].toInt();
+
     if (j.contains(VALUE) && j[VALUE].isString())
-        value = j[VALUE].toString();
+        value = j[VALUE].toInt();
+
+    if (j.contains(PET) && j[PET].isObject()){
+        Pet petObj;
+        petObj.fromJson(j[PET].toObject());
+        pet = make_shared< Pet >( petObj );
+    }
+
+    if (j.contains(ATTRIBUTE) && j[ATTRIBUTE].isObject()){
+        Attribute attributeObj;
+        attributeObj.fromJson(j[ATTRIBUTE].toObject());
+        attribute = make_shared< Attribute >( attributeObj );
+    }
+
 }
 
 void PetAttribute::toJson(QJsonObject &j) const
 {
     BNBModel::toJson(j); // BNBModel must add the id
 
-    j[PETID] = petID;
-    j[ATTRIBUTEID] = attributeID;
+    QJsonObject petObj;
+    pet->toJson(petObj);
+
+    QJsonObject attributeObj;
+    attribute->toJson(attributeObj);
+
+    j[PETID] = petId;
+    j[ATTRIBUTEID] = attributeId;
     j[VALUE] = value;
+    j[PET] = petObj;
+    j[ATTRIBUTE] = attributeObj;
 }
 
 QString PetAttribute::validation() const
 {
     QString v;
 
-    if (petID.isEmpty())
-        v += "Pet ID must not be empty\n";
+    if (pet == nullptr)
+        v += "Pet must not be empty\n";
 
-    if (attributeID.isEmpty())
-            v += "Attribute ID must not be empty\n";
+    if (attribute == nullptr)
+        v += "Attribute must not be empty\n";
 
-    if (value.isEmpty())
-            v += "Value must not be empty\n";
+    // assume id must be positive
+    if (petId <= 0)
+        v += "Pet ID must not be negative or zero\n";
+
+    if (attributeId <= 0)
+        v += "Attribute ID must not be negative or zero\n";
+
+    if(value < 0)
+        v += "Value must be positive\n";
+
 
     return v;
 }
 
-QString PetAttribute::getPetID() const
+int PetAttribute::getPetId() const
 {
-    return petID;
+    return petId;
 }
 
-void PetAttribute::setPetID(const QString &value)
+void PetAttribute::setPetId(int value)
 {
-    petID = value;
+    petId = value;
 }
 
-QString PetAttribute::getAttributeID() const
+shared_ptr<Pet> PetAttribute::getPet() const
 {
-    return attributeID;
+    return pet;
 }
 
-void PetAttribute::setAttributeID(const QString &value)
+void PetAttribute::setPet(const shared_ptr<Pet> &value)
 {
-    attributeID = value;
+    pet = value;
 }
 
-QString PetAttribute::getValue() const
+int PetAttribute::getAttributeId() const
+{
+    return attributeId;
+}
+
+void PetAttribute::setAttributeId(int value)
+{
+    attributeId = value;
+}
+
+shared_ptr<Attribute> PetAttribute::getAttribute() const
+{
+    return attribute;
+}
+
+void PetAttribute::setAttribute(const shared_ptr<Attribute> &value)
+{
+    attribute = value;
+}
+
+int PetAttribute::getValue() const
 {
     return value;
 }
 
-void PetAttribute::setValue(const QString &val)
+void PetAttribute::setValue(int val)
 {
     value = val;
 }
+
+

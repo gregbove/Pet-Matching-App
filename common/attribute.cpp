@@ -3,9 +3,8 @@
 Attribute::Attribute()
 {
     name = QString();
-    offset = QString();
     description = QString();
-    range = QString();
+
 }
 
 Attribute::~Attribute()
@@ -21,10 +20,10 @@ void Attribute::fromJson(const QJsonObject &j)
         name = j[NAME].toString();
 
     if (j.contains(OFFSET) && j[OFFSET].isString())
-        offset = j[OFFSET].toString();
+        offset = j[OFFSET].toInt();
 
     if (j.contains(RANGE) && j[RANGE].isString())
-        range = j[RANGE].toString();
+        range = j[RANGE].toInt();
 
     if (j.contains(DESCRIPTION) && j[DESCRIPTION].isString())
         description = j[DESCRIPTION].toString();
@@ -47,11 +46,8 @@ QString Attribute::validation() const
     if (name.isEmpty())
         v += "name must not be empty\n";
 
-    if (offset.isEmpty())
-        v += "Offset must not be empty\n";
-
-    if (range.isEmpty())
-        v += "Range must not be empty\n";
+    if (range <= 0 )
+        v += "Range should be positives\n";
 
     if (description.isEmpty())
         v += "Description must not be empty\n";
@@ -60,25 +56,7 @@ QString Attribute::validation() const
 }
 
 
-QString Attribute::getRange() const
-{
-    return range;
-}
 
-void Attribute::setRange(const QString &value)
-{
-    range = value;
-}
-
-QString Attribute::getOffset() const
-{
-    return offset;
-}
-
-void Attribute::setOffset(const QString &value)
-{
-    offset = value;
-}
 
 QString Attribute::getDescription() const
 {
@@ -98,4 +76,24 @@ QString Attribute::getName() const
 void Attribute::setName(const QString &value)
 {
     name = value;
+}
+
+int Attribute::getOffset() const
+{
+    return offset;
+}
+
+void Attribute::setOffset(int value)
+{
+    offset = value;
+}
+
+int Attribute::getRange() const
+{
+    return range;
+}
+
+void Attribute::setRange(int value)
+{
+    range = value;
 }

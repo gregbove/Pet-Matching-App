@@ -3,7 +3,6 @@
 Pet::Pet()
 {
     petName = QString();
-    shelterID = QString();
     description = QString();
 }
 
@@ -16,23 +15,35 @@ void Pet::fromJson(const QJsonObject &j)
 {
     BNBModel::fromJson(j); // BNBModel must add the id
 
-    if (j.contains(PETNAME) && j[petName].isString())
+    if (j.contains(PETNAME) && j[PETNAME].isString())
         petName = j[PETNAME].toString();
 
     if (j.contains(SHELTERID) && j[SHELTERID].isString())
-        shelterID = j[SHELTERID].toString();
+        shelterId = j[SHELTERID].toInt();
 
     if (j.contains(DESCRIPTION) && j[DESCRIPTION].isString())
         description = j[DESCRIPTION].toString();
+
+    if (j.contains(SHELTER) && j[SHELTER].isObject()){
+        Shelter shelterObj;
+        shelterObj.fromJson(j[SHELTER].toObject());
+        shelter = make_shared< Shelter >( shelterObj );
+    }
+
 }
 
 void Pet::toJson(QJsonObject &j) const
 {
     BNBModel::toJson(j); // BNBModel must add the id
 
+    QJsonObject shelterObj;
+    shelter->toJson(shelterObj);
+
     j[PETNAME] = petName;
-    j[SHELTERID] = shelterID;
+    j[SHELTERID] = shelterId;
     j[DESCRIPTION] = description;
+    j[SHELTER] = shelterObj;
+
 }
 
 QString Pet::validation() const
@@ -42,11 +53,15 @@ QString Pet::validation() const
     if (petName.isEmpty())
         v += "Pet name must not be empty\n";
 
-    if (shelterID.isEmpty())
-        v += "shelter ID must not be empty\n";
 
     if (description.isEmpty())
         v += "Description must not be empty\n";
+
+    if(shelter == nullptr)
+        v += "shelter should not be null\n";
+
+    if(shelterId <= 0)
+        v += "shelter id should not be negative or zero\n";
 
     return v;
 }
@@ -61,15 +76,6 @@ void Pet::setPetName(const QString &value)
     petName = value;
 }
 
-QString Pet::getShelterID() const
-{
-    return shelterID;
-}
-
-void Pet::setShelterID(const QString &value)
-{
-    shelterID = value;
-}
 
 QString Pet::getDescription() const
 {
@@ -79,4 +85,25 @@ QString Pet::getDescription() const
 void Pet::setDescription(const QString &value)
 {
     description = value;
+}
+
+int Pet::getShelterId() const
+{
+    return shelterId;
+}
+
+void Pet::setShelterId(int value)
+{
+    shelterId = value;
+}
+
+
+shared_ptr<Shelter> Pet::getShelter() const
+{
+    return shelter;
+}
+
+void Pet::setShelter(const shared_ptr<Shelter> &value)
+{
+    shelter = value;
 }

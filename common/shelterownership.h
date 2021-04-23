@@ -3,6 +3,7 @@
 
 #include <QString>
 #include "bnbmodel.h"
+#include "shelterowner.h"
 
 class ShelterOwnership : public BNBModel
 {
@@ -15,18 +16,29 @@ public:
 
     QString validation() const;
 
-    QString getShelterID() const;
-    void setShelterID(const QString &value);
 
-    QString getOwnerID() const;
-    void setOwnerID(const QString &value);
+    int getOwnerId() const;
+    void setOwnerId(int value);
+
+    shared_ptr<ShelterOwner> getShelterOwner() const;
+    void setShelterOwner(const shared_ptr<ShelterOwner> &value);
+
+    int getShelterId() const;
+    void setShelterId(int value);
+
+    shared_ptr<Shelter> getShelter() const;
+    void setShelter(const shared_ptr<Shelter> &value);
 
 private:
-    static constexpr const char* OWNERID = "ownerID";
-    static constexpr const char* SHELTERID = "shelterID";
+    static constexpr const char* OWNERID = "ownerId";
+    static constexpr const char* SHELTERID = "shelterId";
+    static constexpr const char* OWNER = "owner";
+    static constexpr const char* SHELTER = "shelter";
 
-    QString ownerID;
-    QString shelterID;
+    int ownerId;
+    shared_ptr<ShelterOwner> owner;
+    int shelterId;
+    shared_ptr<Shelter> shelter;
 };
 
 #endif // SHELTEROWNERSHIP_H
