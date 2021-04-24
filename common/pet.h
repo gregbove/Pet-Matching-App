@@ -1,9 +1,10 @@
 #ifndef PET_H
 #define PET_H
 
+#include <memory>
+
 #include <QString>
 #include <QJsonObject>
-
 
 #include "bnbmodel.h"
 #include "shelter.h"

@@ -1,6 +1,8 @@
 #ifndef SHELTEROWNER_H
 #define SHELTEROWNER_H
 
+#include <memory>
+
 #include <QString>
 
 #include "shelter.h"
