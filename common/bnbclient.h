@@ -19,12 +19,25 @@
 
 using namespace std;
 
+/**
+ * @brief A web API client for Bread-N-Butter server
+ *
+ * Create an instance of this class with a provided base-url to a running
+ * BNB server instance and use public methods to send requests. The
+ * coorisponding responses will trigger the Failed/Succeeded signal
+ * of the same name. Basically the signals are callbacks for each request.
+ */
 class BNBClient : public QObject
 {
     Q_OBJECT
 public:
     explicit BNBClient(QUrl baseUrl, QObject *parent = nullptr);
 
+    /**
+     * @brief Queue a getParents request
+     *
+     * Receive the result from getParentsFailed or getParentsSucceeded
+     */
     void getParents();
 
 signals:
