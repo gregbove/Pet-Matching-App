@@ -45,6 +45,9 @@ void BNBClient::getParentsFinish()
     {
         getParentsFailed(res->getError());
     }
+
+    delete res;
+    reply->deleteLater();
 }
 
 BNBResponse * BNBClient::parse(QNetworkReply * rep)
