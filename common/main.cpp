@@ -1,50 +1,37 @@
 #include <iostream>
+#include <memory>
+#include <QUrl>
+#include <QCoreApplication>
 #include <QString>
-#include <QDateTime>
-#include <QJsonObject>
-#include <QJsonDocument>
+#include <QVector>
 
-#include "user.h"
-#include "bnbresponse.h"
+#include "parent.h"
+#include "bnbclient.h"
 
 using namespace std;
 
-int main()
+int main(int argc, char * * argv)
 {
-    User * user1 = new User();
+    QCoreApplication app(argc, argv);
+    QCoreApplication::setApplicationName("bread-n-butter-common");
+    QCoreApplication::setApplicationVersion("0.1");
 
-    cout << user1->isValid() << endl;
-    cout << user1->validation().toStdString() << endl;
+    BNBClient c(QUrl("http://localhost:1312"));
 
-    user1->setUsername("Womp");
-    user1->setPassword("thwompthwomp");
+    QObject::connect(&c, &BNBClient::getParentsFailed, [] (QString s) {
+        cout << s.toStdString() << endl;
+    });
 
-    QJsonObject * userJson1 = new QJsonObject();
-    user1->toJson(* userJson1);
+    QObject::connect(&c, &BNBClient::getParentsSucceeded, [] (QVector<shared_ptr<Parent>> ps) {
+        for (shared_ptr<Parent> p : ps)
+        {
+            cout << p->getName().toStdString() << endl;
+        }
+    });
 
-    User * user2 = new User();
-    user2->fromJson(* userJson1);
+    c.getParents();
 
-    QJsonObject * userJson2 = new QJsonObject();
-    user2->toJson(* userJson2);
-
-    BNBResponse * res1 = new BNBResponse();
-    res1->setResult(* userJson1);
-
-    QJsonObject * resJson1 = new QJsonObject();
-    res1->toJson(* resJson1);
-
-    BNBResponse * res2 = new BNBResponse();
-    res2->fromJson(* resJson1);
-
-    QJsonObject * resJson2 = new QJsonObject();
-    res2->toJson(* resJson2);
-
-    QJsonDocument * doc1 = new QJsonDocument(* resJson1);
-    QJsonDocument * doc2 = new QJsonDocument(* resJson2);
-
-    cout << doc1->toJson().toStdString() << endl;
-    cout << doc2->toJson().toStdString() << endl;
+    QCoreApplication::exec();
 
     return 0;
 }

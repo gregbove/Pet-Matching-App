@@ -1,4 +1,4 @@
-QT += core
+QT += core network
 
 TEMPLATE = app
 CONFIG += console c++11
@@ -17,7 +17,8 @@ SOURCES += main.cpp \
     bnbresponse.cpp \
     jsonserializable.cpp \
     parent.cpp \
-    bnbrequest.cpp
+    bnbrequest.cpp \
+    bnbclient.cpp
 
 HEADERS += \
     administrator.h \
@@ -32,4 +33,5 @@ HEADERS += \
     bnbresponse.h \
     jsonserializable.h \
     parent.h \
-    bnbrequest.h
+    bnbrequest.h \
+    bnbclient.h
