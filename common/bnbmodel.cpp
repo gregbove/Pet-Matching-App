@@ -2,7 +2,7 @@
 
 BNBModel::BNBModel()
 {
-
+    id = 0;
 }
 
 void BNBModel::fromJson(const QJsonObject &j)
