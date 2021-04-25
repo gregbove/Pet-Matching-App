@@ -29,11 +29,52 @@ void Db::initialize(QString dbPath)
             "username TEXT,"
             "password TEXT, "
             "createdAt INTEGER)");
+
     db.exec("CREATE TABLE IF NOT EXISTS parents ("
             "id INTEGER PRIMARY KEY ASC,"
             "userId INTEGER NOT NULL,"
             "name TEXT,"
             "FOREIGN KEY (userId) REFERENCES users (id))");
+
+    db.exec("CREATE TABLE IF NOT EXISTS administrators ("
+            "id INTEGER PRIMARY KEY ASC,"
+            "userId INTEGER NOT NULL,"
+            "isSuperAdmin BOOLEAN NOT NULL,"
+            "FOREIGN KEY (userId) REFERENCES users (id))");
+
+    db.exec("CREATE TABLE IF NOT EXISTS shelters ("
+            "id INTEGER PRIMARY KEY ASC,"
+            "name TEXT NOT NULL)");
+
+    db.exec("CREATE TABLE IF NOT EXISTS shelterOwners ("
+            "id INTEGER PRIMARY KEY ASC,"
+            "userId INTEGER NOT NULL,"
+            "shelterId INTEGER NOT NULL,"
+            "name TEXT NOT NULL,"
+            "FOREIGN KEY (userId) REFERENCES users (id),"
+            "FOREIGN KEY (shelterId) REFERENCES shelters (id))");
+
+    db.exec("CREATE TABLE IF NOT EXISTS pets ("
+            "id INTEGER PRIMARY KEY ASC,"
+            "shelterId INTEGER NOT NULL,"
+            "petName TEXT,"
+            "description TEXT,"
+            "FOREIGN KEY (shelterId) REFERENCES shelters (id))");
+
+    db.exec("CREATE TABLE IF NOT EXISTS attributes ("
+            "id INTEGER PRIMARY KEY ASC,"
+            "name TEXT NOT NULL,"
+            "description TEXT,"
+            "range INTEGER NOT NULL,"
+            "offset INTEGER NOT NULL)");
+
+    db.exec("CREATE TABLE IF NOT EXISTS petAttributes ("
+            "id INTEGER PRIMARY KEY ASC,"
+            "petId INTEGER NOT NULL,"
+            "attributeId INTEGER NOT NULL,"
+            "value INTEGER NOT NULL,"
+            "FOREIGN KEY (petId) REFERENCES pets (id),"
+            "FOREIGN KEY (attributeId) REFERENCES attributes (id))");
 }
 
 Db::~Db()
