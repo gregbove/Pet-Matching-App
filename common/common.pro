@@ -12,7 +12,6 @@ SOURCES += main.cpp \
     petattribute.cpp \
     shelter.cpp \
     shelterowner.cpp \
-    shelterownership.cpp \
     user.cpp \
     bnbresponse.cpp \
     jsonserializable.cpp \
@@ -28,7 +27,6 @@ HEADERS += \
     petattribute.h \
     shelter.h \
     shelterowner.h \
-    shelterownership.h \
     user.h \
     bnbresponse.h \
     jsonserializable.h \
