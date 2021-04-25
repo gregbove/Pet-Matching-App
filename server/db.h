@@ -7,6 +7,7 @@
 #include <QSqlError>
 #include <QVector>
 #include <QVariant>
+#include <QString>
 
 #include "../common/parent.h"
 
@@ -28,6 +29,10 @@ public:
     void initialize(QString dbPath);
 
     void foreachParent(const std::function<void(Parent &)> & f) const;
+
+    bool createParentAndUser(Parent & parent, QString * err = nullptr);
+
+    bool createUser(User & user, QString * err = nullptr);
 
     QSqlDatabase db;
 

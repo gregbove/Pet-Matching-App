@@ -71,3 +71,47 @@ void Db::foreachParent(const std::function<void(Parent &)> & func) const
         func(p);
     }
 }
+
+bool Db::createParentAndUser(Parent & p, QString * err)
+{
+    if (!createUser(p.getUser(), err))
+        return false;
+
+    QSqlQuery q;
+    q.prepare("INSERT INTO parents (name, userId) VALUES (?, ?)");
+    q.bindValue(0, p.getName());
+    q.bindValue(1, p.getUser().getId());
+
+    if (q.exec())
+    {
+        p.setId(q.lastInsertId().toInt());
+        return true;
+    }
+    else if (err != nullptr)
+    {
+        *err = q.lastError().text();
+        return false;
+    }
+}
+
+bool Db::createUser(User & u, QString * err)
+{
+    QSqlQuery q;
+    q.prepare("INSERT INTO users "
+              "(username, password, createdAt) "
+              "VALUES (?, ?, ?)");
+    q.bindValue(0, u.getUsername());
+    q.bindValue(1, u.getPassword());
+    q.bindValue(2, u.getCreatedAt().toSecsSinceEpoch());
+
+    if (q.exec())
+    {
+        u.setId(q.lastInsertId().toInt());
+        return true;
+    }
+    else if (err != nullptr)
+    {
+        *err = q.lastError().text();
+        return false;
+    }
+}
