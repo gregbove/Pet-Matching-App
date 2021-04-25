@@ -14,11 +14,38 @@ void BNBClient::getParents()
     pUrl.setPath("/users/parents");
 
     QNetworkRequest req(pUrl);
-    req.setRawHeader("Content-Type", "application/json");
 
     QNetworkReply * rep = man.get(req);
 
     connect(rep, &QNetworkReply::finished, this, &BNBClient::getParentsFinish);
+}
+
+void BNBClient::postParent(Parent &p)
+{
+    QUrl pUrl(base);
+    pUrl.setPath("/users/parents");
+
+    QJsonObject po;
+    p.toJson(po);
+
+    BNBRequest br;
+    br.setPayload(po);
+
+    QJsonObject ro;
+    br.toJson(ro);
+
+    QJsonDocument doc;
+    doc.setObject(ro);
+
+    QByteArray body = doc.toJson();
+
+    QNetworkRequest req(pUrl);
+    req.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
+    req.setHeader(QNetworkRequest::ContentLengthHeader, QString::number(body.length()));
+
+    QNetworkReply * rep = man.post(req, body);
+
+    connect(rep, &QNetworkReply::finished, this, &BNBClient::postParentFinish);
 }
 
 void BNBClient::getParentsFinish()
@@ -50,32 +77,54 @@ void BNBClient::getParentsFinish()
     reply->deleteLater();
 }
 
+void BNBClient::postParentFinish()
+{
+    QNetworkReply * reply =  (QNetworkReply *) sender();
+    BNBResponse * res = parse(reply);
+
+    if (res->getStatus() == OK)
+    {
+        const shared_ptr<Parent> p = make_shared<Parent>();
+        QJsonObject o = res->getResult().toObject();
+        p->fromJson(o);
+
+        postParentSucceeded(p);
+    }
+    else
+    {
+        postParentFailed(res->getError());
+    }
+
+    delete res;
+    reply->deleteLater();
+}
+
 BNBResponse * BNBClient::parse(QNetworkReply * rep)
 {
     BNBResponse * resp = new BNBResponse();
 
-    NetErr err = rep->error();
-    if (err == NetErr::NoError)
-    {
-        QJsonParseError parseError;
-        QJsonDocument doc = QJsonDocument::fromJson(rep->readAll(), &parseError);
+    QJsonParseError parseError;
+    QJsonDocument doc = QJsonDocument::fromJson(rep->readAll(), &parseError);
 
-        if (doc.isObject())
-        {
-            resp->fromJson(doc.object());
-        }
-        else if (doc.isNull())
-        {
-            resp->setError(parseError.errorString());
-        }
-        else
-        {
-            resp->setError("Bad JSON response type");
-        }
+    if (doc.isObject())
+    {
+        resp->fromJson(doc.object());
+    }
+    else if (doc.isNull())
+    {
+        resp->setError(parseError.errorString());
     }
     else
     {
-        resp->setError("Network error");
+        NetErr err = rep->error();
+        if (err == NetErr::NoError)
+        {
+            resp->setError("Bad JSON response format");
+        }
+        else
+        {
+            resp->setError(rep->errorString());
+        }
     }
 
     return resp;

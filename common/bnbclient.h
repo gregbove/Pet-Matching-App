@@ -40,12 +40,18 @@ public:
      */
     void getParents();
 
+    void postParent(Parent & p);
+
 signals:
     void getParentsFailed(QString err);
     void getParentsSucceeded(QVector<shared_ptr<Parent>> parents);
 
+    void postParentFailed(QString err);
+    void postParentSucceeded(const shared_ptr<Parent> & parent);
+
 private slots:
     void getParentsFinish();
+    void postParentFinish();
 
 private:
     QUrl base;
