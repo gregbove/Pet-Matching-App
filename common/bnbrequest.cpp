@@ -18,7 +18,8 @@ void BNBRequest::fromJson(const QJsonObject &j)
 void BNBRequest::toJson(QJsonObject &j) const
 {
     j[PAYLOAD] = payload;
-    j[TYPE] = type;
+    if (!type.isEmpty()) // type may be specified in URL
+        j[TYPE] = type;
 }
 
 QJsonValue BNBRequest::getPayload() const
