@@ -5,6 +5,7 @@
 #include <QString>
 #include <QVector>
 
+#include "user.h"
 #include "parent.h"
 #include "bnbclient.h"
 
@@ -30,6 +31,24 @@ int main(int argc, char * * argv)
     });
 
     c.getParents();
+
+    QObject::connect(&c, &BNBClient::postParentFailed, [] (QString s) {
+        cout << s.toStdString() << endl;
+    });
+
+    QObject::connect(&c, &BNBClient::postParentSucceeded, [] (const shared_ptr<Parent> p) {
+        cout << p->getName().toStdString() << endl;
+    });
+
+    User u;
+    u.setUsername("squonch2020");
+    u.setPassword("i_4m_da_$q0nch");
+
+    Parent p;
+    p.setUser(u);
+    p.setName("Squonch");
+
+    c.postParent(p);
 
     QCoreApplication::exec();
 
