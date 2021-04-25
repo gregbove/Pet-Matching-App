@@ -44,6 +44,8 @@ void UsersController::getHandler(const shared_ptr<Session> session)
 
 void UsersController::postHandler(const shared_ptr<Session> session)
 {
+    Db * db = Db::instance();
+
     size_t contentLen = session->get_request()->get_header("Content-Length", 0);
     string modelType = session->get_request()->get_path_parameter(TYPE);
 
@@ -66,7 +68,6 @@ void UsersController::postHandler(const shared_ptr<Session> session)
             BNBModel * model = nullptr;
             QString type = req.getType();
             QDateTime now = QDateTime::currentDateTimeUtc();
-            QString error;
             if (type.startsWith("parent"))
             {
                 Parent * p = new Parent();
@@ -76,23 +77,35 @@ void UsersController::postHandler(const shared_ptr<Session> session)
             }
             else
             {
-                error = "Invalid type";
+                res.setError("Invalid type");
+                statusCode = restbed::BAD_REQUEST;
             }
 
+            QString validErr;
             if (model != nullptr)
-                error = model->validation();
+                validErr = model->validation();
 
-            if (error.isEmpty())
+            if (!validErr.isEmpty())
             {
-                QJsonObject mObj;
-                model->toJson(mObj);
-                res.setResult(mObj);
-                statusCode = restbed::CREATED;
+                res.setError(validErr);
+                statusCode = restbed::BAD_REQUEST;
             }
             else
             {
-                res.setError(error);
-                statusCode = restbed::BAD_REQUEST;
+                QString dbErr;
+                if (db->createParentAndUser(* (Parent *) model, &dbErr))
+                {
+                    QJsonObject mObj;
+                    model->toJson(mObj);
+                    res.setResult(mObj);
+                    statusCode = restbed::CREATED;
+                }
+                else
+                {
+                    res.setError(dbErr);
+                    statusCode = restbed::INTERNAL_SERVER_ERROR;
+                }
+
             }
 
             if (model != nullptr)
