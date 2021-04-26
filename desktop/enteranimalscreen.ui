@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>AppStartWidget</class>
- <widget class="QWidget" name="AppStartWidget">
+ <class>EnterAnimalScreen</class>
+ <widget class="QWidget" name="EnterAnimalScreen">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>AppStartWidget</string>
+   <string>Form</string>
   </property>
   <layout class="QHBoxLayout" name="horizontalLayout">
    <item>
@@ -19,50 +19,81 @@
      <widget class="QWidget" name="page">
       <layout class="QVBoxLayout" name="verticalLayout">
        <item>
+        <widget class="QLabel" name="label_6">
+         <property name="text">
+          <string>General Characteristics</string>
+         </property>
+        </widget>
+       </item>
+       <item>
         <layout class="QHBoxLayout" name="horizontalLayout_2">
          <item>
           <widget class="QLabel" name="label">
            <property name="text">
-            <string>Username:</string>
+            <string>Type:</string>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QLineEdit" name="usernameLine"/>
+          <widget class="QLineEdit" name="animalType"/>
          </item>
         </layout>
        </item>
        <item>
         <layout class="QHBoxLayout" name="horizontalLayout_3">
          <item>
-          <widget class="QLabel" name="label_2">
+          <widget class="QLabel" name="label_3">
            <property name="text">
-            <string>Password:</string>
+            <string>Name</string>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QLineEdit" name="passwordLine"/>
+          <widget class="QLineEdit" name="animalName"/>
          </item>
         </layout>
        </item>
        <item>
         <layout class="QHBoxLayout" name="horizontalLayout_4">
          <item>
-          <widget class="QPushButton" name="loginButton">
+          <widget class="QLabel" name="label_2">
            <property name="text">
-            <string>Login</string>
+            <string>Age (years)</string>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QPushButton" name="createAccountButton">
+          <widget class="QLineEdit" name="animalAge"/>
+         </item>
+        </layout>
+       </item>
+       <item>
+        <layout class="QHBoxLayout" name="horizontalLayout_6">
+         <item>
+          <widget class="QLabel" name="label_5">
            <property name="text">
-            <string>Create Account</string>
+            <string>Size (&quot;S&quot;, &quot;M&quot;, &quot;L&quot;) </string>
            </property>
           </widget>
          </item>
+         <item>
+          <widget class="QLineEdit" name="animalSize"/>
+         </item>
         </layout>
+       </item>
+       <item>
+        <widget class="QPushButton" name="enterAnimalButton">
+         <property name="text">
+          <string>Continue</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="backButton">
+         <property name="text">
+          <string>Back</string>
+         </property>
+        </widget>
        </item>
       </layout>
      </widget>
@@ -70,7 +101,6 @@
    </item>
   </layout>
  </widget>
- <layoutdefault spacing="6" margin="11"/>
  <resources/>
  <connections/>
 </ui>
