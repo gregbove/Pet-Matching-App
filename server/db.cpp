@@ -135,6 +135,55 @@ bool Db::createParentAndUser(Parent & p, QString * err)
     }
 }
 
+bool Db::createAdministratorAndUser(Administrator &a, QString *err)
+{
+    if (!createUser(a.getUser(), err))
+        return false;
+
+    QSqlQuery q;
+    q.prepare("INSERT INTO administrators "
+              "(isSuperAdmin, userId) "
+              "VALUES (?, ?)");
+    q.bindValue(0, a.getIsSuperAdmin());
+    q.bindValue(1, a.getUser().getId());
+
+    if (q.exec())
+    {
+        a.setId(q.lastInsertId().toInt());
+        return true;
+    }
+    else if (err != nullptr)
+    {
+        *err = q.lastError().text();
+        return false;
+    }
+}
+
+bool Db::createShelterOwnerAndUser(ShelterOwner &o, QString *err)
+{
+    if (!createUser(o.getUser(), err))
+        return false;
+
+    QSqlQuery q;
+    q.prepare("INSERT INTO shelterOwner "
+              "(name, userId, shelterId) "
+              "VALUES (?, ?, ?)");
+    q.bindValue(0, o.getName());
+    q.bindValue(1, o.getUser().getId());
+    q.bindValue(2, o.getShelterId());
+
+    if (q.exec())
+    {
+        o.setId(q.lastInsertId().toInt());
+        return true;
+    }
+    else if (err != nullptr)
+    {
+        *err = q.lastError().text();
+        return false;
+    }
+}
+
 bool Db::createUser(User & u, QString * err)
 {
     QSqlQuery q;

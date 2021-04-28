@@ -23,6 +23,9 @@ SOURCES += main.cpp \
     ../common/bnbmodel.cpp \
     ../common/user.cpp \
     ../common/parent.cpp \
+    ../common/shelterowner.cpp \
+    ../common/administrator.cpp \
+    ../common/shelter.cpp \
     ../common/bnbrequest.cpp \
     userscontroller.cpp \
     db.cpp
@@ -34,6 +37,9 @@ HEADERS += \
     ../common/bnbmodel.h \
     ../common/user.cpp \
     ../common/parent.h \
+    ../common/shelterowner.h \
+    ../common/administrator.h \
+    ../common/shelter.h \
     ../common/bnbrequest.cpp \
     userscontroller.h \
     db.h

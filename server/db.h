@@ -9,7 +9,10 @@
 #include <QVariant>
 #include <QString>
 
+#include "../common/user.h"
 #include "../common/parent.h"
+#include "../common/administrator.h"
+#include "../common/shelterowner.h"
 
 #include <iostream>
 #include <functional>
@@ -31,6 +34,12 @@ public:
     void foreachParent(const std::function<void(Parent &)> & f) const;
 
     bool createParentAndUser(Parent & parent, QString * err = nullptr);
+
+    bool createAdministratorAndUser(
+            Administrator & administrator, QString * err = nullptr);
+
+    bool createShelterOwnerAndUser(
+            ShelterOwner & shelterOwner, QString * err = nullptr);
 
     bool createUser(User & user, QString * err = nullptr);
 
