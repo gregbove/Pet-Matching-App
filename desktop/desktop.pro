@@ -25,10 +25,37 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 SOURCES += \
         main.cpp \
-        appstartwidget.cpp
+        appstartwidget.cpp \
+    userhomescreen.cpp \
+    ownerhomescreen.cpp \
+    adminhomescreen.cpp \
+    createaccountscreen.cpp \
+    enteranimalscreen.cpp \
+    userpreferencesscreen.cpp \
+    usersearchscreen.cpp \
+    enteranimalscreengeneral.cpp \
+    enteranimalscreennew.cpp
 
 HEADERS += \
-        appstartwidget.h
+        appstartwidget.h \
+    userhomescreen.h \
+    ownerhomescreen.h \
+    adminhomescreen.h \
+    createaccountscreen.h \
+    enteranimalscreen.h \
+    userpreferencesscreen.h \
+    usersearchscreen.h \
+    enteranimalscreengeneral.h \
+    enteranimalscreennew.h
 
 FORMS += \
-        appstartwidget.ui
+        appstartwidget.ui \
+    userhomescreen.ui \
+    ownerhomescreen.ui \
+    adminhomescreen.ui \
+    createaccountscreen.ui \
+    enteranimalscreen.ui \
+    userpreferencesscreen.ui \
+    usersearchscreen.ui \
+    enteranimalscreengeneral.ui \
+    enteranimalscreennew.ui
