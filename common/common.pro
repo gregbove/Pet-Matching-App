@@ -11,6 +11,7 @@ SOURCES += main.cpp \
     bnbmodel.cpp \
     pet.cpp \
     petattribute.cpp \
+    petmatch.cpp \
     petwatch.cpp \
     shelter.cpp \
     shelterowner.cpp \
@@ -28,6 +29,7 @@ HEADERS += \
     bnbmodel.h \
     pet.h \
     petattribute.h \
+    petmatch.h \
     petwatch.h \
     shelter.h \
     shelterowner.h \
