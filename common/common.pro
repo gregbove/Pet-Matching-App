@@ -7,6 +7,7 @@ CONFIG -= app_bundle
 SOURCES += main.cpp \
     administrator.cpp \
     attribute.cpp \
+    attributepreference.cpp \
     bnbmodel.cpp \
     pet.cpp \
     petattribute.cpp \
@@ -23,6 +24,7 @@ SOURCES += main.cpp \
 HEADERS += \
     administrator.h \
     attribute.h \
+    attributepreference.h \
     bnbmodel.h \
     pet.h \
     petattribute.h \
