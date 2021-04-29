@@ -10,6 +10,7 @@ SOURCES += main.cpp \
     attributepreference.cpp \
     bnbmodel.cpp \
     pet.cpp \
+    petadoption.cpp \
     petattribute.cpp \
     petmatch.cpp \
     petwatch.cpp \
@@ -28,6 +29,7 @@ HEADERS += \
     attributepreference.h \
     bnbmodel.h \
     pet.h \
+    petadoption.h \
     petattribute.h \
     petmatch.h \
     petwatch.h \
