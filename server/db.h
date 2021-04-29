@@ -10,6 +10,10 @@
 #include <QString>
 
 #include "../common/parent.h"
+#include "../common/shelter.h"
+#include "../common/pet.h"
+#include "../common/shelterowner.h"
+#include "../common/administrator.h"
 
 #include <iostream>
 #include <functional>
@@ -30,9 +34,21 @@ public:
 
     void foreachParent(const std::function<void(Parent &)> & f) const;
 
+//    void foreachShelterOwner(const std::function<void(ShelterOwner &)> & f) const;
+
+//    void foreachAdmin(const std::function<void(Administrator &)> & f) const;
+
     bool createParentAndUser(Parent & parent, QString * err = nullptr);
 
     bool createUser(User & user, QString * err = nullptr);
+
+//    bool createShelter(Shelter & s, QString * err = nullptr);
+
+//    bool createPet(Pet & p, QString * err = nullptr);
+    
+//    bool createShelterOwner(ShelterOwner & so, QString * err = nullptr);
+
+
 
     QSqlDatabase db;
 
