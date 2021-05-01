@@ -22,10 +22,24 @@ void UsersController::getHandler(const shared_ptr<Session> session)
     Db * db = Db::instance();
 
     QJsonArray parents;
+    QJsonArray shelterOwners;
+    QJsonArray admins;
     db->foreachParent([&parents](Parent & p) {
         QJsonObject o;
         p.toJson(o);
         parents.append(o);
+    });
+
+    db->foreachShelterOwner([&ShelterOwner](ShelterOwner & so) {
+        QJsonObject o;
+        so.toJson(o);
+        shelterOwners.append(o);
+    });
+
+    db->foreachAdmin([&Administrator](Administrator & a) {
+        QJsonObject o;
+        a.toJson(o);
+        admins.append(o);
     });
 
     BNBResponse res;

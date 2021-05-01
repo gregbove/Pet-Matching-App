@@ -37,9 +37,9 @@ public:
 
     void foreachParent(const std::function<void(Parent &)> & f) const;
 
-//    void foreachShelterOwner(const std::function<void(ShelterOwner &)> & f) const;
+    void foreachShelterOwner(const std::function<void(ShelterOwner &)> & f) const;
 
-//    void foreachAdmin(const std::function<void(Administrator &)> & f) const;
+    void foreachAdmin(const std::function<void(Administrator &)> & f) const;
 
     bool createParentAndUser(Parent & parent, QString * err = nullptr);
 

@@ -156,66 +156,65 @@ void Db::foreachParent(const std::function<void(Parent &)> & func) const
     }
 }
 
-//void Db::foreachShelterOwner(const std::function<void(ShelterOwner &)> & func) const
-//{
-//    QSqlQuery q = db.exec("SELECT "
-//                          "users.id, "
-//                          "users.username, "
-//                          "users.password, "
-//                          "users.createdAt, "
-//                          "shelterOwner.id, "
-//                          "shelterOwner.name "
-//                          "FROM shelterOwner "
-//                          "INNER JOIN users "
-//                          "ON shelterOwner.userId = users.id");
+void Db::foreachShelterOwner(const std::function<void(ShelterOwner &)> & func) const
+{
+    QSqlQuery q = db.exec("SELECT "
+                          "users.id, "
+                          "users.username, "
+                          "users.password, "
+                          "users.createdAt, "
+                          "shelterOwner.id, "
+                          "shelterOwner.name "
+                          "FROM shelterOwner "
+                          "INNER JOIN users "
+                          "ON shelterOwner.userId = users.id");
 
-//    while (q.next())
-//    {
-//        User u;
-//        ShelterOwner s;
+    while (q.next())
+    {
+        User u;
+        ShelterOwner s;
 
-//        u.setId(q.value(0).toInt());
-//        u.setUsername(q.value(1).toString());
-//        u.setPassword(q.value(2).toString());
-//        u.setCreatedAt(q.value(3).toDateTime());
+        u.setId(q.value(0).toInt());
+        u.setUsername(q.value(1).toString());
+        u.setPassword(q.value(2).toString());
+        u.setCreatedAt(q.value(3).toDateTime());
 
-//        s.setUser(u);
-//        s.setId(q.value(4).toInt());
-//        s.setName(q.value(5).toString());
+        s.setUser(u);
+        s.setId(q.value(4).toInt());
+        s.setName(q.value(5).toString());
 
-//        func(s);
-//    }
-//}
+        func(s);
+    }
+}
 
-//void Db::foreachAdmin(const std::function<void(Administrator &)> & func) const
-//{
-//    QSqlQuery q = db.exec("SELECT "
-//                          "users.id, "
-//                          "users.username, "
-//                          "users.password, "
-//                          "users.createdAt, "
-//                          "admin.id, "
-//                          "admin.name "
-//                          "FROM admin "
-//                          "INNER JOIN users "
-//                          "ON shelterOwner.userId = users.id");
+void Db::foreachAdmin(const std::function<void(Administrator &)> & func) const
+{
+    QSqlQuery q = db.exec("SELECT "
+                          "users.id, "
+                          "users.username, "
+                          "users.password, "
+                          "users.createdAt, "
+                          "admin.id, "
+                          "FROM admin "
+                          "INNER JOIN users "
+                          "ON shelterOwner.userId = users.id");
 
-//    while (q.next())
-//    {
-//        User u;
-//        Administrator a;
+    while (q.next())
+    {
+        User u;
+        Administrator a;
 
-//        u.setId(q.value(0).toInt());
-//        u.setUsername(q.value(1).toString());
-//        u.setPassword(q.value(2).toString());
-//        u.setCreatedAt(q.value(3).toDateTime());
+        u.setId(q.value(0).toInt());
+        u.setUsername(q.value(1).toString());
+        u.setPassword(q.value(2).toString());
+        u.setCreatedAt(q.value(3).toDateTime());
 
-//        a.setUser(u);
-//        a.setId(q.value(4).toInt());
+        a.setUser(u);
+        a.setId(q.value(4).toInt());
 
-//        func(a);
-//    }
-//}
+        func(a);
+    }
+}
 
 bool Db::createParentAndUser(Parent & p, QString * err)
 {
