@@ -75,6 +75,18 @@ void UsersController::postHandler(const shared_ptr<Session> session)
                 p->getUser().setCreatedAt(now);
                 model = p;
             }
+            else if (type.startsWith("shelterowner")){
+                ShelterOwner * so = new ShelterOwner();
+                so->fromJson(req.getPayload().toObject());
+                so->getUser().setCreatedAt(now);
+                model = so;
+            }
+            else if (type.startsWith("administrator")){
+                Administrator * a = new Administrator();
+                a->fromJson(req.getPayload().toObject());
+                a->getUser().setCreatedAt(now);
+                model = a;
+            }
             else
             {
                 res.setError("Invalid type");
@@ -94,6 +106,20 @@ void UsersController::postHandler(const shared_ptr<Session> session)
             {
                 QString dbErr;
                 if (db->createParentAndUser(* (Parent *) model, &dbErr))
+                {
+                    QJsonObject mObj;
+                    model->toJson(mObj);
+                    res.setResult(mObj);
+                    statusCode = restbed::CREATED;
+                }
+                else if (db->createShelterOwnerAndUser(* (ShelterOwner *) model, &dbErr))
+                {
+                    QJsonObject mObj;
+                    model->toJson(mObj);
+                    res.setResult(mObj);
+                    statusCode = restbed::CREATED;
+                }
+                else if (db->createAdministratorAndUser(* (Administrator *) model, &dbErr))
                 {
                     QJsonObject mObj;
                     model->toJson(mObj);
