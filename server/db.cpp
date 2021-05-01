@@ -75,6 +75,49 @@ void Db::initialize(QString dbPath)
             "value INTEGER NOT NULL,"
             "FOREIGN KEY (petId) REFERENCES pets (id),"
             "FOREIGN KEY (attributeId) REFERENCES attributes (id))");
+
+    db.exec("CREATE TABLE IF NOT EXISTS attributePreferences ("
+            "id INTEGER PRIMARY KEY ASC,"
+            "parentId INTEGER NOT NULL,"
+            "attributeId INTEGER NOT NULL,"
+            "weight DOUBLE NOT NULL,"
+            "FOREIGN KEY (parentId) REFERENCES parents (id),"
+            "FOREIGN KEY (attributeId) REFERENCES attributes (id))");
+
+    db.exec("CREATE TABLE IF NOT EXISTS petWatches ("
+            "id INTEGER PRIMARY KEY ASC,"
+            "parentId INTEGER NOT NULL,"
+            "petId INTEGER NOT NULL,"
+            "createdAt INTEGER NOT NULL,"
+            "FOREIGN KEY (parentId) REFERENCES parents (id),"
+            "FOREIGN KEY (petId) REFERENCES pets (id))");
+
+    db.exec("CREATE TABLE IF NOT EXISTS petWatches ("
+            "id INTEGER PRIMARY KEY ASC,"
+            "parentId INTEGER NOT NULL,"
+            "petId INTEGER NOT NULL,"
+            "createdAt INTEGER NOT NULL,"
+            "FOREIGN KEY (parentId) REFERENCES parents (id),"
+            "FOREIGN KEY (petId) REFERENCES pets (id))");
+
+    db.exec("CREATE TABLE IF NOT EXISTS petMatches ("
+            "id INTEGER PRIMARY KEY ASC,"
+            "parentId INTEGER NOT NULL,"
+            "petId INTEGER NOT NULL,"
+            "updatedAt INTEGER NOT NULL,"
+            "score DOUBLE NOT NULL,"
+            "FOREIGN KEY (parentId) REFERENCES parents (id),"
+            "FOREIGN KEY (petId) REFERENCES pets (id))");
+
+    db.exec("CREATE TABLE IF NOT EXISTS petAdoptions ("
+            "id INTEGER PRIMARY KEY ASC,"
+            "parentId INTEGER NOT NULL,"
+            "petId INTEGER NOT NULL,"
+            "createdAt INTEGER NOT NULL,"
+            "active BOOLEAN NOT NULL,"
+            "approved BOOLEAN NOT NULL,"
+            "FOREIGN KEY (parentId) REFERENCES parents (id),"
+            "FOREIGN KEY (petId) REFERENCES pets (id))");
 }
 
 Db::~Db()

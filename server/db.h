@@ -15,7 +15,6 @@
 #include "../common/pet.h"
 #include "../common/shelterowner.h"
 #include "../common/administrator.h"
-=======
 #include "../common/administrator.h"
 #include "../common/shelterowner.h"
 
