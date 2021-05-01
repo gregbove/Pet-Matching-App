@@ -4,38 +4,39 @@ typedef QNetworkReply::NetworkError NetErr;
 
 BNBClient::BNBClient(QUrl baseUrl, QObject *parent) : QObject(parent)
 {
-    baseUrl.setPath("");
+    baseUrl.setPath(""); // we expect there to be no path prefix
     base = baseUrl;
 }
 
 void BNBClient::getParents()
 {
-    QUrl pUrl(base);
+    QUrl pUrl(base); // clone base url
     pUrl.setPath("/users/parents");
 
     QNetworkRequest req(pUrl);
 
-    QNetworkReply * rep = man.get(req);
+    QNetworkReply * rep = man.get(req); // queue a GET request
 
+    // when rep::finished gets fired, call this::getParentsFinish
     connect(rep, &QNetworkReply::finished, this, &BNBClient::getParentsFinish);
 }
 
 void BNBClient::postParent(Parent &p)
 {
-    QUrl pUrl(base);
+    QUrl pUrl(base); // clone base url
     pUrl.setPath("/users/parents");
 
     QJsonObject po;
-    p.toJson(po);
+    p.toJson(po); // serialize Parent p
 
     BNBRequest br;
-    br.setPayload(po);
+    br.setPayload(po); // wrap parent in BNBRequest
 
     QJsonObject ro;
-    br.toJson(ro);
+    br.toJson(ro); // serialize BNBRequest br
 
     QJsonDocument doc;
-    doc.setObject(ro);
+    doc.setObject(ro); // put serialized br in a document
 
     QByteArray body = doc.toJson();
 
@@ -43,18 +44,21 @@ void BNBClient::postParent(Parent &p)
     req.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
     req.setHeader(QNetworkRequest::ContentLengthHeader, QString::number(body.length()));
 
-    QNetworkReply * rep = man.post(req, body);
+    QNetworkReply * rep = man.post(req, body); // queue a POST request
 
+    // when rep::finished gets fired, call this::postParentFinish
     connect(rep, &QNetworkReply::finished, this, &BNBClient::postParentFinish);
 }
 
 void BNBClient::getParentsFinish()
 {
+    // get the reply (from getParents) that called us
     QNetworkReply * reply =  (QNetworkReply *) sender();
-    BNBResponse * res = parse(reply);
+    BNBResponse * res = parse(reply); // see below
 
     if (res->getStatus() == OK)
     {
+        // result is a JSONArray of JSONObjects of Parent
         QJsonArray arr = res->getResult().toArray();
         QVector<shared_ptr<Parent>> ps;
 
@@ -62,70 +66,73 @@ void BNBClient::getParentsFinish()
         {
             shared_ptr<Parent> p = make_shared<Parent>();
             QJsonObject o = v.toObject();
-            p->fromJson(o);
+            p->fromJson(o); // deserialize Parent
             ps.append(p);
         }
 
-        getParentsSucceeded(ps);
+        getParentsSucceeded(ps); // emit success signal
     }
     else
     {
-        getParentsFailed(res->getError());
+        getParentsFailed(res->getError()); // emit failure signal
     }
 
-    delete res;
-    reply->deleteLater();
+    delete res; // we're done with res, it's contents were parsed
+    reply->deleteLater(); // see QNetworkReply best practices
 }
 
 void BNBClient::postParentFinish()
 {
+    // get the reply (from getParents) that called us
     QNetworkReply * reply =  (QNetworkReply *) sender();
-    BNBResponse * res = parse(reply);
+    BNBResponse * res = parse(reply); // see below
 
     if (res->getStatus() == OK)
     {
         const shared_ptr<Parent> p = make_shared<Parent>();
+        // result is a JSONObject of a Parent
         QJsonObject o = res->getResult().toObject();
-        p->fromJson(o);
+        p->fromJson(o); // deserialize Parent
 
-        postParentSucceeded(p);
+        postParentSucceeded(p); // emit success signal
     }
     else
     {
-        postParentFailed(res->getError());
+        postParentFailed(res->getError()); // emit failure signal
     }
 
-    delete res;
-    reply->deleteLater();
+    delete res; // we're done with res, it's contents were parsed
+    reply->deleteLater(); // see QNetworkReply best practices
 }
 
 BNBResponse * BNBClient::parse(QNetworkReply * rep)
 {
-    BNBResponse * resp = new BNBResponse();
+    BNBResponse * resp = new BNBResponse(); // CALLER MUST DELETE THIS!
 
-    QJsonParseError parseError;
+    QJsonParseError parseError; // error to pass by ref, just in case
+    // read reply into QJsonDocument and try parse
     QJsonDocument doc = QJsonDocument::fromJson(rep->readAll(), &parseError);
 
-    if (doc.isObject())
+    if (doc.isObject()) // should be BNBResponse serialized in JsonObject
     {
-        resp->fromJson(doc.object());
+        resp->fromJson(doc.object()); // deserialize BNBResponse
     }
-    else if (doc.isNull())
+    else if (doc.isNull()) // parsing failed
     {
         resp->setError(parseError.errorString());
     }
     else
     {
         NetErr err = rep->error();
-        if (err == NetErr::NoError)
+        if (err == NetErr::NoError) // good request, bad JSON type
         {
             resp->setError("Bad JSON response format");
         }
-        else
+        else // unaccounted network error of some kind
         {
             resp->setError(rep->errorString());
         }
     }
 
-    return resp;
+    return resp; // don't forget to delete this response when you're done
 }
