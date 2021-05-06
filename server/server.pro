@@ -17,6 +17,7 @@ DEPENDPATH += $$PWD/../libs/x64-linux/include
 unix:!macx: PRE_TARGETDEPS += $$PWD/../libs/x64-linux/lib/librestbed.a
 
 SOURCES += main.cpp \
+    attributecontroller.cpp \
     defaultcontroller.cpp \
     bnbcontroller.cpp \
     ../common/bnbresponse.cpp \
@@ -27,11 +28,15 @@ SOURCES += main.cpp \
     ../common/administrator.cpp \
     ../common/shelter.cpp \
     ../common/bnbrequest.cpp \
+    ../common/attribute.cpp \
+    ../common/attributepreference.cpp \
+    ../common/petattribute.cpp \
     userscontroller.cpp \
     db.cpp \
     petscontroller.cpp
 
 HEADERS += \
+    attributecontroller.h \
     defaultcontroller.h \
     bnbcontroller.h \
     ../common/bnbresponse.h \
@@ -42,6 +47,9 @@ HEADERS += \
     ../common/administrator.h \
     ../common/shelter.h \
     ../common/bnbrequest.cpp \
+    ../common/attribute.cpp \
+    ../common/attributepreference.cpp \
+    ../common/petattribute.cpp \
     userscontroller.h \
     db.h \
     petscontroller.h
