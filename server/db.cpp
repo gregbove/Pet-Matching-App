@@ -92,14 +92,6 @@ void Db::initialize(QString dbPath)
             "FOREIGN KEY (parentId) REFERENCES parents (id),"
             "FOREIGN KEY (petId) REFERENCES pets (id))");
 
-    db.exec("CREATE TABLE IF NOT EXISTS petWatches ("
-            "id INTEGER PRIMARY KEY ASC,"
-            "parentId INTEGER NOT NULL,"
-            "petId INTEGER NOT NULL,"
-            "createdAt INTEGER NOT NULL,"
-            "FOREIGN KEY (parentId) REFERENCES parents (id),"
-            "FOREIGN KEY (petId) REFERENCES pets (id))");
-
     db.exec("CREATE TABLE IF NOT EXISTS petMatches ("
             "id INTEGER PRIMARY KEY ASC,"
             "parentId INTEGER NOT NULL,"
@@ -163,6 +155,8 @@ void Db::foreachShelterOwner(const std::function<void(ShelterOwner &)> & func) c
                           "users.username, "
                           "users.password, "
                           "users.createdAt, "
+                          "shelter.id, "
+                          "shelter.name, "
                           "shelterOwner.id, "
                           "shelterOwner.name "
                           "FROM shelterOwner "
@@ -172,16 +166,20 @@ void Db::foreachShelterOwner(const std::function<void(ShelterOwner &)> & func) c
     while (q.next())
     {
         User u;
-        ShelterOwner s;
+        Shelter s;
+        ShelterOwner so;
 
         u.setId(q.value(0).toInt());
         u.setUsername(q.value(1).toString());
         u.setPassword(q.value(2).toString());
         u.setCreatedAt(q.value(3).toDateTime());
 
-        s.setUser(u);
-        s.setId(q.value(4).toInt());
         s.setName(q.value(5).toString());
+
+        so.setUser(u);
+        so.setShelter(s);
+        so.setId(q.value(6).toInt());
+        so.setName(q.value(7).toString());
 
         func(s);
     }
@@ -195,6 +193,7 @@ void Db::foreachAdmin(const std::function<void(Administrator &)> & func) const
                           "users.password, "
                           "users.createdAt, "
                           "admin.id, "
+                          "admin.isSuperAdmin"
                           "FROM admin "
                           "INNER JOIN users "
                           "ON shelterOwner.userId = users.id");
@@ -211,9 +210,40 @@ void Db::foreachAdmin(const std::function<void(Administrator &)> & func) const
 
         a.setUser(u);
         a.setId(q.value(4).toInt());
+        a.setIsSuperAdmin(q.value(5).toBool());
 
         func(a);
     }
+}
+
+void Db::foreachPet(const std::function<void(Pet &)> & func) const{
+    QSqlQuery q = db.exec("SELECT "
+                          "shelter.id, "
+                          "shelter.name, "
+                          "pet.id, "
+                          "pet.petName, "
+                          "pet.description"
+                          "FROM pets "
+                          "INNER JOIN shelter "
+                          "ON pet.shelterId = shelter.id");
+
+    while (q.next())
+    {
+        Shelter s;
+        Pet p;
+
+        s.setId(q.value(0).toInt());
+        s.setName(q.value(1).toString());
+
+        p.setShelter(s);
+        p.setId(q.value(4).toInt());
+        p.setPetName(q.value(5).toString());
+        p.setDescription(q.value(5).toString());
+
+        func(a);
+    }
+}
+
 }
 
 bool Db::createParentAndUser(Parent & p, QString * err)
@@ -309,6 +339,27 @@ bool Db::createUser(User & u, QString * err)
     }
 }
 
+bool Db::createPet(Pet & p, QString * err){
+    QSqlQuery q;
+    q.prepare("INSERT INTO pets "
+              "(name, description, shelterID) "
+              "VALUES (?, ?, ?)");
+    q.bindValue(0, p.getPetName());
+    q.bindValue(1, p.getDescription());
+    q.bindValue(2, p.getShelterId());
+
+    if (q.exec())
+    {
+        p.setId(q.lastInsertId().toInt());
+        return true;
+    }
+    else if (err != nullptr)
+    {
+        *err = q.lastError().text();
+        return false;
+    }
+}
+
 //bool createShelterOwner(ShelterOwner & so, QString * err = nullptr){
     
 //    if (!createUser(so.getUser(), err))
@@ -353,24 +404,6 @@ bool Db::createUser(User & u, QString * err)
 //    }
 //}
 
-//bool Db::createPet(Pet & p, QString * err){
-//    QSqlQuery q;
-//    q.prepare("INSERT INTO pets "
-//              "(name, description, shelterID) "
-//              "VALUES (?, ?, ?)");
-//    q.bindValue(0, p.getPetName());
-//    q.bindValue(1, p.getDescription());
-//    q.bindValue(2, p.getShelterId());
 
-//    if (q.exec())
-//    {
-//        return true;
-//    }
-//    else if (err != nullptr)
-//    {
-//        *err = q.lastError().text();
-//        return false;
-//    }
-//}
 
 
