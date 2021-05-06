@@ -1,8 +1,8 @@
-#include "petattributecontroller.h"
+#include "attributepreferencecontroller.h"
 
 
 
-void PetAttributeController::addToResource(const shared_ptr<Resource> res)
+void AttributePreferenceController::addToResource(const shared_ptr<Resource> res)
 {
     set<string> pathList = {
         //        (baseUrl + "/").toStdString(),
@@ -12,28 +12,28 @@ void PetAttributeController::addToResource(const shared_ptr<Resource> res)
 
     res->set_paths(pathList);
     res->set_method_handler("GET", std::bind(
-                                &PetAttributeController::getHandler,
+                                &AttributePreferenceController::getHandler,
                                 this, std::placeholders::_1));
     res->set_method_handler("POST", std::bind(
-                                &PetAttributeController::postHandler,
+                                &AttributePreferenceController::postHandler,
                                 this, std::placeholders::_1));
 }
 
-void PetAttributeController::getHandler(const shared_ptr<Session> session)
+void AttributePreferenceController::getHandler(const shared_ptr<Session> session)
 {
     Db * db = Db::instance();
 
-    QJsonArray petAttributes;
-    //    db->foreachPetAttribute([&petAttributes](PetAttribute & pattr) {
+    QJsonArray attributepre;
+    //    db->foreachAttributePreference([&attributes](AttributePreference & attrpre) {
     //        QJsonObject o;
-    //        pattr.toJson(o);
-    //        petAttributes.append(o);
+    //        attrpre.toJson(o);
+    //        attributepre.append(o);
     //    });
     //    Waiting for the corresponding db function
 
 
     BNBResponse res;
-    res.setResult(petAttributes);
+    res.setResult(attributepre);
 
     QJsonObject resObj;
     res.toJson(resObj);
@@ -46,7 +46,7 @@ void PetAttributeController::getHandler(const shared_ptr<Session> session)
                    });
 }
 
-void PetAttributeController::postHandler(const shared_ptr<Session> session)
+void AttributePreferenceController::postHandler(const shared_ptr<Session> session)
 {
     Db * db = Db::instance();
 
@@ -70,9 +70,9 @@ void PetAttributeController::postHandler(const shared_ptr<Session> session)
 
             BNBModel * model = nullptr;
 
-            PetAttribute* attr = new PetAttribute();
-            attr->fromJson(req.getPayload().toObject());
-            model = attr;
+            AttributePreference* attrpre = new AttributePreference();
+            attrpre->fromJson(req.getPayload().toObject());
+            model = attrpre;
 
 
             QString validErr;
@@ -87,7 +87,7 @@ void PetAttributeController::postHandler(const shared_ptr<Session> session)
             else
             {
                 QString dbErr;
-//                if (db->createPetAttribute(* (Attribute *) model, &dbErr))
+//                if (db->createAttribute(* (Attribute *) model, &dbErr))
 //                {
 //                    QJsonObject mObj;
 //                    model->toJson(mObj);

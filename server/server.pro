@@ -18,6 +18,7 @@ unix:!macx: PRE_TARGETDEPS += $$PWD/../libs/x64-linux/lib/librestbed.a
 
 SOURCES += main.cpp \
     attributecontroller.cpp \
+    attributepreferencecontroller.cpp \
     defaultcontroller.cpp \
     bnbcontroller.cpp \
     ../common/bnbresponse.cpp \
@@ -38,6 +39,7 @@ SOURCES += main.cpp \
 
 HEADERS += \
     attributecontroller.h \
+    attributepreferencecontroller.h \
     defaultcontroller.h \
     bnbcontroller.h \
     ../common/bnbresponse.h \
