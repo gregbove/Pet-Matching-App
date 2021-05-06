@@ -31,6 +31,7 @@ SOURCES += main.cpp \
     ../common/attribute.cpp \
     ../common/attributepreference.cpp \
     ../common/petattribute.cpp \
+    petattributecontroller.cpp \
     userscontroller.cpp \
     db.cpp \
     petscontroller.cpp
@@ -50,6 +51,7 @@ HEADERS += \
     ../common/attribute.cpp \
     ../common/attributepreference.cpp \
     ../common/petattribute.cpp \
+    petattributecontroller.h \
     userscontroller.h \
     db.h \
     petscontroller.h
