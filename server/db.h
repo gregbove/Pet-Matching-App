@@ -15,8 +15,6 @@
 #include "../common/pet.h"
 #include "../common/shelterowner.h"
 #include "../common/administrator.h"
-#include "../common/administrator.h"
-#include "../common/shelterowner.h"
 
 #include <iostream>
 #include <functional>
@@ -44,6 +42,8 @@ public:
     bool getUser(QString userName, BNBModel ** user,
                  UserType & uType, QString * err = nullptr) const;
 
+    void foreachPet(const std::function<void(Pet &)> & f) const;
+
     bool createParentAndUser(Parent & parent, QString * err = nullptr);
 
     bool createAdministratorAndUser(
@@ -54,12 +54,7 @@ public:
 
     bool createUser(User & user, QString * err = nullptr);
 
-//    bool createShelter(Shelter & s, QString * err = nullptr);
-
-//    bool createPet(Pet & p, QString * err = nullptr);
-    
-//    bool createShelterOwner(ShelterOwner & so, QString * err = nullptr);
-
+    bool createPet(Pet & p, QString * err);
 
 
     QSqlDatabase db;
