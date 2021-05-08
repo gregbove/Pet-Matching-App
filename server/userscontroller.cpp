@@ -30,13 +30,13 @@ void UsersController::getHandler(const shared_ptr<Session> session)
         parents.append(o);
     });
 
-    db->foreachShelterOwner([&ShelterOwner](ShelterOwner & so) {
+    db->foreachShelterOwner([&](ShelterOwner & so) {
         QJsonObject o;
         so.toJson(o);
         shelterOwners.append(o);
     });
 
-    db->foreachAdmin([&Administrator](Administrator & a) {
+    db->foreachAdmin([&](Administrator & a) {
         QJsonObject o;
         a.toJson(o);
         admins.append(o);
