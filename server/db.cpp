@@ -216,6 +216,87 @@ void Db::foreachAdmin(const std::function<void(Administrator &)> & func) const
     }
 }
 
+bool Db::getUser(QString userName, BNBModel **model, UserType & uType, QString * err) const
+{
+    QSqlQuery q;
+    q.prepare("SELECT "
+              "users.id, "
+              "users.username, "
+              "users.password, "
+              "users.createdAt, "
+              "parents.id, "
+              "parents.name, "
+              "shelterOwners.id, "
+              "shelterOwners.name, "
+              "shelterOwners.shelterId, "
+              "administrators.id, "
+              "administrators.isSuperAdmin "
+              "FROM users "
+              "LEFT JOIN parents "
+              "ON users.id = parents.userId "
+              "LEFT JOIN shelterOwners "
+              "ON users.id = shelterOwners.userId "
+              "LEFT JOIN administrators "
+              "ON users.id = administrators.userId "
+              "WHERE users.username = ?");
+
+    q.bindValue(0, userName);
+    if (!q.exec())
+    {
+        *err = q.lastError().text();
+        return false;
+    }
+
+    if (q.next())
+    {
+
+        User u;
+        u.setId(q.value(0).toInt());
+        u.setUsername(q.value(1).toString());
+        u.setPassword(q.value(2).toString());
+        u.setCreatedAt(q.value(3).toDateTime());
+
+        if (!q.value(4).isNull())
+        {
+            Parent * p = new Parent();
+            p->setUser(u);
+            p->setId(q.value(4).toInt());
+            p->setName(q.value(5).toString());
+            *model = p;
+            uType = PARENT;
+        }
+        else if (!q.value(6).isNull())
+        {
+            ShelterOwner * o = new ShelterOwner();
+            o->setUser(u);
+            o->setId(q.value(6).toInt());
+            o->setName(q.value(7).toString());
+            o->setShelterId(q.value(8).toInt());
+            *model = o;
+            uType = SHELTER_OWNER;
+        }
+        else if (!q.value(9).isNull())
+        {
+            Administrator * a = new Administrator();
+            a->setUser(u);
+            a->setId(q.value(9).toInt());
+            a->setIsSuperAdmin(q.value(10).toBool());
+            *model = a;
+            uType = ADMINISTRATOR;
+        }
+        else
+        {
+            *err = "No matching subtype for user";
+            return false;
+        }
+
+        return true;
+    }
+
+    *err = "User not found";
+    return true;
+}
+
 bool Db::createParentAndUser(Parent & p, QString * err)
 {
     if (!createUser(p.getUser(), err))

@@ -41,6 +41,9 @@ public:
 
     void foreachAdmin(const std::function<void(Administrator &)> & f) const;
 
+    bool getUser(QString userName, BNBModel ** user,
+                 UserType & uType, QString * err = nullptr) const;
+
     bool createParentAndUser(Parent & parent, QString * err = nullptr);
 
     bool createAdministratorAndUser(
