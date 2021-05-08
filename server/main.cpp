@@ -7,6 +7,7 @@
 
 #include "defaultcontroller.h"
 #include "userscontroller.h"
+#include "authcontroller.h"
 #include "db.h"
 
 using namespace std;
@@ -62,6 +63,10 @@ int main(int argc, char * * argv)
     const shared_ptr<Resource> resUsers = make_shared<Resource>();
     ctlUsers->addToResource(resUsers);
 
+    shared_ptr<AuthController> ctlAuth = make_shared<AuthController>();
+    const shared_ptr<Resource> resAuth = make_shared<Resource>();
+    ctlAuth->addToResource(resAuth);
+
     auto settings = make_shared<Settings>();
     settings->set_port(port);
     settings->set_default_header("Connection", "close");
@@ -69,6 +74,7 @@ int main(int argc, char * * argv)
     Service service;
     service.publish(resDefault);
     service.publish(resUsers);
+    service.publish(resAuth);
 
     service.start(settings);
 
