@@ -28,7 +28,8 @@ SOURCES += main.cpp \
     ../common/shelter.cpp \
     ../common/bnbrequest.cpp \
     userscontroller.cpp \
-    db.cpp
+    db.cpp \
+    authcontroller.cpp
 
 HEADERS += \
     defaultcontroller.h \
@@ -42,4 +43,5 @@ HEADERS += \
     ../common/shelter.h \
     ../common/bnbrequest.cpp \
     userscontroller.h \
-    db.h
+    db.h \
+    authcontroller.h
