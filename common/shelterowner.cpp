@@ -18,7 +18,7 @@ void ShelterOwner::fromJson(const QJsonObject &j)
     if (j.contains(NAME) && j[NAME].isString())
         name = j[NAME].toString();
 
-    if (j.contains(SHELTER_ID) && j[SHELTER_ID].isString())
+    if (j.contains(SHELTER_ID) && j[SHELTER_ID].isDouble())
         shelterId = j[SHELTER_ID].toInt();
 
     if (j.contains(SHELTER) && j[SHELTER].isObject()){
@@ -36,13 +36,16 @@ void ShelterOwner::toJson(QJsonObject &j) const
     QJsonObject userObj;
     user.toJson(userObj);
 
-    QJsonObject shelterObj;
-    shelter->toJson(shelterObj);
+    if (shelter != nullptr)
+    {
+        QJsonObject shelterObj;
+        shelter->toJson(shelterObj);
+        j[SHELTER] = shelterObj;
+    }
 
     j[USER] = userObj;
     j[NAME] = name;
     j[SHELTER_ID] = shelterId;
-    j[SHELTER] = shelterObj;
 }
 
 QString ShelterOwner::validation() const
@@ -54,9 +57,6 @@ QString ShelterOwner::validation() const
 
     if (shelterId <= 0)
         v += "Shelter ID must not be negative or zero\n";
-
-    if (shelter == nullptr)
-        v += "shelter must not be null\n";
 
     return v;
 }

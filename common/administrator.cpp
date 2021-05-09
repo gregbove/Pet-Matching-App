@@ -15,7 +15,7 @@ void Administrator::fromJson(const QJsonObject &j)
         user.fromJson(j[USER].toObject());
 
     if (j.contains(ISSUPERADMIN))
-        isSuperAdmin = j[ISSUPERADMIN].toString()=="true";
+        isSuperAdmin = j[ISSUPERADMIN].toBool();
 }
 
 void Administrator::toJson(QJsonObject &j) const
