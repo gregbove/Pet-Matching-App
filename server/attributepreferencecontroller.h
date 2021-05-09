@@ -22,7 +22,7 @@ using namespace restbed;
  * @brief Handles fetching and creating AttributePreference
  *
  * Endpoints:
- * /AttributePreference/{id: a postivive integer}
+ * /attributes/preferences/{parentId: a postivive integer}
  *
  * > GET /AttributePreference
  * < a BNBResponse containing a list of AttributePreference
@@ -34,7 +34,7 @@ using namespace restbed;
 class AttributePreferenceController : public BNBController
 {
 public:
-    AttributePreferenceController(QString baseUrl = "/attribute") : BNBController(baseUrl) {};
+    AttributePreferenceController(QString baseUrl = "/attributes/preferences") : BNBController(baseUrl) {};
 
     void addToResource(const shared_ptr<Resource>);
 

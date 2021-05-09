@@ -22,7 +22,7 @@ using namespace restbed;
  * @brief Handles fetching and creating Attributes
  *
  * Endpoints:
- * /attribute/{id: a postivive integer}
+ * /attribute/{petId: a postivive integer}
  *
  * > GET /petAttribute
  * < a BNBResponse containing a list of PetAttributes
@@ -34,7 +34,7 @@ using namespace restbed;
 class PetAttributeController : public BNBController
 {
 public:
-    PetAttributeController(QString baseUrl = "/attribute") : BNBController(baseUrl) {};
+    PetAttributeController(QString baseUrl = "/attributes/pets") : BNBController(baseUrl) {};
 
     void addToResource(const shared_ptr<Resource>);
 

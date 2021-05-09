@@ -5,9 +5,7 @@
 void AttributePreferenceController::addToResource(const shared_ptr<Resource> res)
 {
     set<string> pathList = {
-        //        (baseUrl + "/").toStdString(),
-        (baseUrl + "/{type: [a-z]+}").toStdString(),
-        (baseUrl + "/{id: [0-9]+}").toStdString()
+        (baseUrl + "/{parentId: [0-9]+}").toStdString()
     };
 
     res->set_paths(pathList);

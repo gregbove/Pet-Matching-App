@@ -22,20 +22,20 @@ using namespace restbed;
  * @brief Handles fetching and creating different types of Users
  *
  * Endpoints:
- * /pet/{type: dog|cat|snake}
- * /pet/{name: a string type for name of pet}
+ * /pets
+ * /pets/{id: a positive integer}
  *
- * > GET /pet/dog
- * < a BNBResponse containing a list of Dogs
+ * > GET /pets/1
+ * < a BNBResponse containing a pet
  *
- * > POST /pet/dog
- * | a BNBRequest containing a dog to be created
- * < a BNBResponse containing the newly created dog or an error
+ * > POST /pets
+ * | a BNBRequest containing a pet to be created
+ * < a BNBResponse containing the newly created pet or an error
  */
 class PetsController : public BNBController
 {
 public:
-    PetsController(QString baseUrl = "/pet") : BNBController(baseUrl) {};
+    PetsController(QString baseUrl = "/pets") : BNBController(baseUrl) {};
 
     void addToResource(const shared_ptr<Resource>);
 

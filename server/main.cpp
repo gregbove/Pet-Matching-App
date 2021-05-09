@@ -9,6 +9,10 @@
 #include "userscontroller.h"
 #include "authcontroller.h"
 #include "matchescontroller.h"
+#include "attributecontroller.h"
+#include "attributepreferencecontroller.h"
+#include "petattributecontroller.h"
+#include "petscontroller.h"
 #include "db.h"
 
 using namespace std;
@@ -72,6 +76,25 @@ int main(int argc, char * * argv)
     const shared_ptr<Resource> resMatch = make_shared<Resource>();
     ctlMatch->addToResource(resMatch);
 
+    shared_ptr<AttributeController> ctlAttr =
+            make_shared<AttributeController>();
+    const shared_ptr<Resource> resAttr = make_shared<Resource>();
+    ctlAttr->addToResource(resAttr);
+
+    shared_ptr<AttributePreferenceController> ctlPref =
+            make_shared<AttributePreferenceController>();
+    const shared_ptr<Resource> resPref = make_shared<Resource>();
+    ctlPref->addToResource(resPref);
+
+    shared_ptr<PetAttributeController> ctlPAttr =
+            make_shared<PetAttributeController>();
+    const shared_ptr<Resource> resPAttr = make_shared<Resource>();
+    ctlPAttr->addToResource(resPAttr);
+
+    shared_ptr<PetsController> ctlPet = make_shared<PetsController>();
+    const shared_ptr<Resource> resPet = make_shared<Resource>();
+    ctlPet->addToResource(resPet);
+
     auto settings = make_shared<Settings>();
     settings->set_port(port);
     settings->set_default_header("Connection", "close");
@@ -82,6 +105,10 @@ int main(int argc, char * * argv)
     service.publish(resUsers);
     service.publish(resAuth);
     service.publish(resMatch);
+    service.publish(resAttr);
+    service.publish(resPref);
+    service.publish(resPAttr);
+    service.publish(resPet);
 
     service.start(settings);
 

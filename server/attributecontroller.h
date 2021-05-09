@@ -33,7 +33,7 @@ using namespace restbed;
 class AttributeController : public BNBController
 {
 public:
-    AttributeController(QString baseUrl = "/attribute") : BNBController(baseUrl) {};
+    AttributeController(QString baseUrl = "/attributes") : BNBController(baseUrl) {};
 
     void addToResource(const shared_ptr<Resource>);
 
