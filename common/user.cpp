@@ -14,6 +14,26 @@ QString User::getTypeStr(UserType t)
     }
 }
 
+UserType User::getType(QString t)
+{
+    t = t.toLower();
+
+    if (t.startsWith("parent"))
+    {
+        return PARENT;
+    }
+    else if (t.startsWith("shelterowner"))
+    {
+        return SHELTER_OWNER;
+    }
+    else if (t.startsWith("admin"))
+    {
+        return ADMINISTRATOR;
+    }
+
+    return INVALID_USER_TYPE;
+}
+
 User::User()
 {
     username = QString();

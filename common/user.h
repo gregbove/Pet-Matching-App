@@ -10,7 +10,10 @@
 using namespace std;
 
 enum UserType {
-    PARENT, SHELTER_OWNER, ADMINISTRATOR
+    PARENT,
+    SHELTER_OWNER,
+    ADMINISTRATOR,
+    INVALID_USER_TYPE = -1
 };
 
 /**
@@ -27,6 +30,8 @@ class User : public BNBModel
 {
 public:
     static QString getTypeStr(UserType t);
+
+    static UserType getType(QString t);
 
     User();
     virtual ~User();
