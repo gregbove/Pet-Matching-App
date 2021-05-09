@@ -33,11 +33,13 @@ SOURCES += main.cpp \
     ../common/attributepreference.cpp \
     ../common/petattribute.cpp \
     ../common/pet.cpp \
+    ../common/petmatch.cpp \
     petattributecontroller.cpp \
     userscontroller.cpp \
     db.cpp \
     authcontroller.cpp \
-    petscontroller.cpp
+    petscontroller.cpp \
+    matchescontroller.cpp
 
 HEADERS += \
     attributecontroller.h \
@@ -56,8 +58,10 @@ HEADERS += \
     ../common/attributepreference.h \
     ../common/petattribute.h \
     ../common/pet.h \
+    ../common/petmatch.h \
     petattributecontroller.h \
     userscontroller.h \
     db.h \
     authcontroller.h \
-    petscontroller.h
+    petscontroller.h \
+    matchescontroller.h

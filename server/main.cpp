@@ -8,6 +8,7 @@
 #include "defaultcontroller.h"
 #include "userscontroller.h"
 #include "authcontroller.h"
+#include "matchescontroller.h"
 #include "db.h"
 
 using namespace std;
@@ -67,14 +68,20 @@ int main(int argc, char * * argv)
     const shared_ptr<Resource> resAuth = make_shared<Resource>();
     ctlAuth->addToResource(resAuth);
 
+    shared_ptr<MatchesController> ctlMatch = make_shared<MatchesController>();
+    const shared_ptr<Resource> resMatch = make_shared<Resource>();
+    ctlMatch->addToResource(resMatch);
+
     auto settings = make_shared<Settings>();
     settings->set_port(port);
     settings->set_default_header("Connection", "close");
+    settings->set_default_header("Content-Type", "application/json");
 
     Service service;
     service.publish(resDefault);
     service.publish(resUsers);
     service.publish(resAuth);
+    service.publish(resMatch);
 
     service.start(settings);
 

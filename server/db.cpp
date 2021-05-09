@@ -331,6 +331,49 @@ void Db::foreachPet(const std::function<void(Pet &)> & func) const{
     }
 }
 
+void Db::foreachPetMatch(int parentId, const std::function<void (PetMatch &)> &func, QString *err) const
+{
+    QSqlQuery q;
+    q.prepare("SELECT "
+              "petMatches.id, "
+              "petMatches.updatedAt, "
+              "petMatches.score, "
+              "pets.id, "
+              "pets.petName, "
+              "pets.description, "
+              "pets.shelterId "
+              "FROM petMatches "
+              "LEFT JOIN pets "
+              "ON petMatches.petId = pets.id "
+              "WHERE petMatches.parentId = ?");
+    q.bindValue(0, parentId);
+
+    if (!q.exec())
+    {
+        *err = q.lastError().text();
+        return;
+    }
+
+    while (q.next())
+    {
+        PetMatch m;
+        m.setId(q.value(0).toInt());
+        m.setUpdatedAt(q.value(1).toDateTime());
+        m.setScore(q.value(2).toDouble());
+
+        shared_ptr<Pet> p = make_shared<Pet>();
+        p->setId(q.value(3).toInt());
+        p->setPetName(q.value(4).toString());
+        p->setDescription(q.value(5).toString());
+        p->setShelterId(q.value(6).toInt());
+
+        m.setPet(p);
+        m.setPetId(p->getId());
+
+        func(m);
+    }
+}
+
 bool Db::getShelter(int id, Shelter &shelter, QString *err) const
 {
     QSqlQuery q;
@@ -353,6 +396,37 @@ bool Db::getShelter(int id, Shelter &shelter, QString *err) const
     }
 
     return false;
+}
+
+bool Db::updatePetMatches(int parentId, QString *err)
+{
+    QSqlQuery q; // TODO: Delete existing matches first maybe? Also, TEST THIS.
+    q.prepare("INSERT INTO petMatches "
+              "(parentId, updatedAt, petId, score) "
+              "SELECT :parentId, :updatedAt, pets.id, ( "
+              "SELECT AVG(attributePreferences.weight "
+              "* (petAttributes.value - attributes.offset) "
+              "/ attributes.range) AS score "
+              "FROM petAttributes "
+              "LEFT JOIN attributes "
+              "INNER JOIN attributePreferences "
+              "ON petAttributes.petId = pets.id "
+              "AND petAttributes.attributeId = attributes.id "
+              "AND attributePreferences.parentId = :parentId "
+              "AND petAttributes.attributeId = attributePreferences.attributeId "
+              ") AS score "
+              "FROM pets");
+
+    q.bindValue(":parentId", parentId);
+    q.bindValue(":updatedAt", QDateTime::currentDateTimeUtc());
+
+    if (!q.exec())
+    {
+        *err = q.lastError().text();
+        return false;
+    }
+
+    return true;
 }
 
 bool Db::createParentAndUser(Parent & p, QString * err)
