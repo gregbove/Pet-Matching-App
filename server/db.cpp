@@ -155,13 +155,15 @@ void Db::foreachShelterOwner(const std::function<void(ShelterOwner &)> & func) c
                           "users.username, "
                           "users.password, "
                           "users.createdAt, "
-                          "shelter.id, "
-                          "shelter.name, "
-                          "shelterOwner.id, "
-                          "shelterOwner.name "
-                          "FROM shelterOwner "
-                          "INNER JOIN users "
-                          "ON shelterOwner.userId = users.id");
+                          "shelters.id, "
+                          "shelters.name, "
+                          "shelterOwners.id, "
+                          "shelterOwners.name "
+                          "FROM shelterOwners "
+                          "LEFT JOIN shelters "
+                          "ON shelters.id = shelterOwners.shelterId "
+                          "LEFT JOIN users "
+                          "ON shelterOwners.userId = users.id");
 
     while (q.next())
     {
@@ -180,6 +182,7 @@ void Db::foreachShelterOwner(const std::function<void(ShelterOwner &)> & func) c
         so.setUser(u);
         so.setShelter(s);
         so.setShelterId(s->getId());
+
         so.setId(q.value(6).toInt());
         so.setName(q.value(7).toString());
 
@@ -194,11 +197,11 @@ void Db::foreachAdmin(const std::function<void(Administrator &)> & func) const
                           "users.username, "
                           "users.password, "
                           "users.createdAt, "
-                          "admin.id, "
-                          "admin.isSuperAdmin"
-                          "FROM admin "
-                          "INNER JOIN users "
-                          "ON shelterOwner.userId = users.id");
+                          "administrators.id, "
+                          "administrators.isSuperAdmin "
+                          "FROM administrators "
+                          "LEFT JOIN users "
+                          "ON administrators.userId = users.id");
 
     while (q.next())
     {
@@ -328,6 +331,30 @@ void Db::foreachPet(const std::function<void(Pet &)> & func) const{
     }
 }
 
+bool Db::getShelter(int id, Shelter &shelter, QString *err) const
+{
+    QSqlQuery q;
+    q.prepare("SELECT name FROM shelters WHERE id = ?");
+    q.bindValue(0, id);
+
+    if (!q.exec())
+    {
+        *err = q.lastError().text();
+    }
+    else if (!q.next())
+    {
+        *err = "Shelter not found";
+    }
+    else
+    {
+        shelter.setId(id);
+        shelter.setName(q.value(0).toString());
+        return true;
+    }
+
+    return false;
+}
+
 bool Db::createParentAndUser(Parent & p, QString * err)
 {
     if (!createUser(p.getUser(), err))
@@ -376,11 +403,15 @@ bool Db::createAdministratorAndUser(Administrator &a, QString *err)
 
 bool Db::createShelterOwnerAndUser(ShelterOwner &o, QString *err)
 {
+    Shelter s;
+    if (!getShelter(o.getShelterId(), s, err))
+        return false;
+
     if (!createUser(o.getUser(), err))
         return false;
 
     QSqlQuery q;
-    q.prepare("INSERT INTO shelterOwner "
+    q.prepare("INSERT INTO shelterOwners "
               "(name, userId, shelterId) "
               "VALUES (?, ?, ?)");
     q.bindValue(0, o.getName());

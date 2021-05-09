@@ -44,6 +44,8 @@ public:
 
     void foreachPet(const std::function<void(Pet &)> & f) const;
 
+    bool getShelter(int id, Shelter & shelter, QString * err = nullptr) const;
+
     bool createParentAndUser(Parent & parent, QString * err = nullptr);
 
     bool createAdministratorAndUser(
