@@ -95,10 +95,10 @@ void BNBClient::postLoginFinish()
             um = make_shared<Parent>();
             break;
         case SHELTER_OWNER:
-            um = make_shared<Parent>();
+            um = make_shared<ShelterOwner>();
             break;
         case ADMINISTRATOR:
-            um = make_shared<Parent>();
+            um = make_shared<Administrator>();
             break;
         default:
             break;

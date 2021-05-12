@@ -29,13 +29,13 @@ int main(int argc, char * * argv)
         if (ut == SHELTER_OWNER)
         {
             auto so = dynamic_pointer_cast<ShelterOwner>(um);
-            cout << so->getShelter()->getName().toStdString() << endl;
+            cout << so->getName() << endl;
         }
     });
 
     User u;
-    u.setUsername("sandy");
-    u.setPassword("sandy");
+    u.setUsername("animalzone");
+    u.setPassword("animalzone");
 
     c.postLogin(u);
 

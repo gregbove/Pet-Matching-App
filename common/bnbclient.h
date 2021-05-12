@@ -4,6 +4,8 @@
 #include "bnbrequest.h"
 #include "bnbresponse.h"
 #include "parent.h"
+#include "shelterowner.h"
+#include "administrator.h"
 
 #include <memory>
 
