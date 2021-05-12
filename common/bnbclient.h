@@ -33,6 +33,8 @@ class BNBClient : public QObject
 public:
     explicit BNBClient(QUrl baseUrl, QObject *parent = nullptr);
 
+    void postLogin(User & u);
+
     /**
      * @brief Queue a getParents request
      *
@@ -43,6 +45,9 @@ public:
     void postParent(Parent & p);
 
 signals:
+    void postLoginFailed(QString err);
+    void postLoginSucceeded(shared_ptr<BNBModel> user, UserType uType);
+
     void getParentsFailed(QString err);
     void getParentsSucceeded(QVector<shared_ptr<Parent>> parents);
 
@@ -50,6 +55,7 @@ signals:
     void postParentSucceeded(const shared_ptr<Parent> & parent);
 
 private slots:
+    void postLoginFinish();
     void getParentsFinish();
     void postParentFinish();
 
