@@ -8,6 +8,34 @@ BNBClient::BNBClient(QUrl baseUrl, QObject *parent) : QObject(parent)
     base = baseUrl;
 }
 
+void BNBClient::postLogin(User &u)
+{
+    QUrl pUrl(base); // clone base url
+    pUrl.setPath("/login");
+
+    QJsonObject po;
+    u.toJson(po);
+
+    BNBRequest br;
+    br.setPayload(po);
+
+    QJsonObject ro;
+    br.toJson(ro);
+
+    QJsonDocument doc;
+    doc.setObject(ro);
+
+    QByteArray body = doc.toJson();
+
+    QNetworkRequest req(pUrl);
+    req.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
+    req.setHeader(QNetworkRequest::ContentLengthHeader, QString::number(body.length()));
+
+    QNetworkReply * rep = man.post(req, body); // queue a POST request
+
+    connect(rep, &QNetworkReply::finished, this, &BNBClient::postLoginFinish);
+}
+
 void BNBClient::getParents()
 {
     QUrl pUrl(base); // clone base url
@@ -175,6 +203,45 @@ void BNBClient::getPetsFinish()
     }
     delete res; // we're done with res, it's contents were parsed
     reply->deleteLater(); // see QNetworkReply best practices
+}
+
+void BNBClient::postLoginFinish()
+{
+    QNetworkReply * reply =  (QNetworkReply *) sender();
+    BNBResponse * res = parse(reply);
+
+    if (res->getStatus() == OK)
+    {
+        QJsonObject o = res->getResult().toObject();
+        QString uTypeStr = o["userType"].toString();
+        UserType uType = User::getType(uTypeStr);
+
+        shared_ptr<BNBModel> um = nullptr;
+        switch (uType) {
+        case PARENT:
+            um = make_shared<Parent>();
+            break;
+        case SHELTER_OWNER:
+            um = make_shared<ShelterOwner>();
+            break;
+        case ADMINISTRATOR:
+            um = make_shared<Administrator>();
+            break;
+        default:
+            break;
+        }
+
+        um->fromJson(o);
+
+        postLoginSucceeded(um, uType);
+    }
+    else
+    {
+        postLoginFailed(res->getError());
+    }
+
+    delete res;
+    reply->deleteLater();
 }
 
 void BNBClient::getParentsFinish()

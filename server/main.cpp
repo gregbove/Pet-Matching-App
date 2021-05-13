@@ -7,6 +7,12 @@
 
 #include "defaultcontroller.h"
 #include "userscontroller.h"
+#include "authcontroller.h"
+#include "matchescontroller.h"
+#include "attributecontroller.h"
+#include "attributepreferencecontroller.h"
+#include "petattributecontroller.h"
+#include "petscontroller.h"
 #include "db.h"
 
 using namespace std;
@@ -62,13 +68,47 @@ int main(int argc, char * * argv)
     const shared_ptr<Resource> resUsers = make_shared<Resource>();
     ctlUsers->addToResource(resUsers);
 
+    shared_ptr<AuthController> ctlAuth = make_shared<AuthController>();
+    const shared_ptr<Resource> resAuth = make_shared<Resource>();
+    ctlAuth->addToResource(resAuth);
+
+    shared_ptr<MatchesController> ctlMatch = make_shared<MatchesController>();
+    const shared_ptr<Resource> resMatch = make_shared<Resource>();
+    ctlMatch->addToResource(resMatch);
+
+    shared_ptr<AttributeController> ctlAttr =
+            make_shared<AttributeController>();
+    const shared_ptr<Resource> resAttr = make_shared<Resource>();
+    ctlAttr->addToResource(resAttr);
+
+    shared_ptr<AttributePreferenceController> ctlPref =
+            make_shared<AttributePreferenceController>();
+    const shared_ptr<Resource> resPref = make_shared<Resource>();
+    ctlPref->addToResource(resPref);
+
+    shared_ptr<PetAttributeController> ctlPAttr =
+            make_shared<PetAttributeController>();
+    const shared_ptr<Resource> resPAttr = make_shared<Resource>();
+    ctlPAttr->addToResource(resPAttr);
+
+    shared_ptr<PetsController> ctlPet = make_shared<PetsController>();
+    const shared_ptr<Resource> resPet = make_shared<Resource>();
+    ctlPet->addToResource(resPet);
+
     auto settings = make_shared<Settings>();
     settings->set_port(port);
     settings->set_default_header("Connection", "close");
+    settings->set_default_header("Content-Type", "application/json");
 
     Service service;
     service.publish(resDefault);
     service.publish(resUsers);
+    service.publish(resAuth);
+    service.publish(resMatch);
+    service.publish(resAttr);
+    service.publish(resPref);
+    service.publish(resPAttr);
+    service.publish(resPet);
 
     service.start(settings);
 

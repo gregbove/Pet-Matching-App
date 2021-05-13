@@ -15,8 +15,7 @@
 #include "../common/pet.h"
 #include "../common/shelterowner.h"
 #include "../common/administrator.h"
-#include "../common/administrator.h"
-#include "../common/shelterowner.h"
+#include "../common/petmatch.h"
 
 #include <iostream>
 #include <functional>
@@ -41,6 +40,19 @@ public:
 
     void foreachAdmin(const std::function<void(Administrator &)> & f) const;
 
+    void foreachPet(const std::function<void(Pet &)> & f) const;
+
+    void foreachPetMatch(int parentId,
+                         const std::function<void(PetMatch &)> & f,
+                         QString * err = nullptr) const;
+
+    bool getUser(QString userName, BNBModel ** user,
+                 UserType & uType, QString * err = nullptr) const;
+
+    bool getShelter(int id, Shelter & shelter, QString * err = nullptr) const;
+
+    bool updatePetMatches(int parentId, QString * err = nullptr);
+
     bool createParentAndUser(Parent & parent, QString * err = nullptr);
 
     bool createAdministratorAndUser(
@@ -51,12 +63,7 @@ public:
 
     bool createUser(User & user, QString * err = nullptr);
 
-//    bool createShelter(Shelter & s, QString * err = nullptr);
-
-//    bool createPet(Pet & p, QString * err = nullptr);
-    
-//    bool createShelterOwner(ShelterOwner & so, QString * err = nullptr);
-
+    bool createPet(Pet & p, QString * err);
 
 
     QSqlDatabase db;

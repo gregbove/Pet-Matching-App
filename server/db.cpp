@@ -92,14 +92,6 @@ void Db::initialize(QString dbPath)
             "FOREIGN KEY (parentId) REFERENCES parents (id),"
             "FOREIGN KEY (petId) REFERENCES pets (id))");
 
-    db.exec("CREATE TABLE IF NOT EXISTS petWatches ("
-            "id INTEGER PRIMARY KEY ASC,"
-            "parentId INTEGER NOT NULL,"
-            "petId INTEGER NOT NULL,"
-            "createdAt INTEGER NOT NULL,"
-            "FOREIGN KEY (parentId) REFERENCES parents (id),"
-            "FOREIGN KEY (petId) REFERENCES pets (id))");
-
     db.exec("CREATE TABLE IF NOT EXISTS petMatches ("
             "id INTEGER PRIMARY KEY ASC,"
             "parentId INTEGER NOT NULL,"
@@ -163,27 +155,38 @@ void Db::foreachShelterOwner(const std::function<void(ShelterOwner &)> & func) c
                           "users.username, "
                           "users.password, "
                           "users.createdAt, "
-                          "shelterOwner.id, "
-                          "shelterOwner.name "
-                          "FROM shelterOwner "
-                          "INNER JOIN users "
-                          "ON shelterOwner.userId = users.id");
+                          "shelters.id, "
+                          "shelters.name, "
+                          "shelterOwners.id, "
+                          "shelterOwners.name "
+                          "FROM shelterOwners "
+                          "LEFT JOIN shelters "
+                          "ON shelters.id = shelterOwners.shelterId "
+                          "LEFT JOIN users "
+                          "ON shelterOwners.userId = users.id");
 
     while (q.next())
     {
         User u;
-        ShelterOwner s;
+        shared_ptr<Shelter> s = make_shared<Shelter>();
+        ShelterOwner so;
 
         u.setId(q.value(0).toInt());
         u.setUsername(q.value(1).toString());
         u.setPassword(q.value(2).toString());
         u.setCreatedAt(q.value(3).toDateTime());
 
-        s.setUser(u);
-        s.setId(q.value(4).toInt());
-        s.setName(q.value(5).toString());
+        s->setId(q.value(4).toInt());
+        s->setName(q.value(5).toString());
 
-        func(s);
+        so.setUser(u);
+        so.setShelter(s);
+        so.setShelterId(s->getId());
+
+        so.setId(q.value(6).toInt());
+        so.setName(q.value(7).toString());
+
+        func(so);
     }
 }
 
@@ -194,10 +197,11 @@ void Db::foreachAdmin(const std::function<void(Administrator &)> & func) const
                           "users.username, "
                           "users.password, "
                           "users.createdAt, "
-                          "admin.id, "
-                          "FROM admin "
-                          "INNER JOIN users "
-                          "ON shelterOwner.userId = users.id");
+                          "administrators.id, "
+                          "administrators.isSuperAdmin "
+                          "FROM administrators "
+                          "LEFT JOIN users "
+                          "ON administrators.userId = users.id");
 
     while (q.next())
     {
@@ -211,9 +215,218 @@ void Db::foreachAdmin(const std::function<void(Administrator &)> & func) const
 
         a.setUser(u);
         a.setId(q.value(4).toInt());
+        a.setIsSuperAdmin(q.value(5).toBool());
 
         func(a);
     }
+}
+
+bool Db::getUser(QString userName, BNBModel **model, UserType & uType, QString * err) const
+{
+    QSqlQuery q;
+    q.prepare("SELECT "
+              "users.id, "
+              "users.username, "
+              "users.password, "
+              "users.createdAt, "
+              "parents.id, "
+              "parents.name, "
+              "shelterOwners.id, "
+              "shelterOwners.name, "
+              "shelterOwners.shelterId, "
+              "administrators.id, "
+              "administrators.isSuperAdmin "
+              "FROM users "
+              "LEFT JOIN parents "
+              "ON users.id = parents.userId "
+              "LEFT JOIN shelterOwners "
+              "ON users.id = shelterOwners.userId "
+              "LEFT JOIN administrators "
+              "ON users.id = administrators.userId "
+              "WHERE users.username = ?");
+
+    q.bindValue(0, userName);
+    if (!q.exec())
+    {
+        *err = q.lastError().text();
+        return false;
+    }
+
+    if (q.next())
+    {
+
+        User u;
+        u.setId(q.value(0).toInt());
+        u.setUsername(q.value(1).toString());
+        u.setPassword(q.value(2).toString());
+        u.setCreatedAt(q.value(3).toDateTime());
+
+        if (!q.value(4).isNull())
+        {
+            Parent * p = new Parent();
+            p->setUser(u);
+            p->setId(q.value(4).toInt());
+            p->setName(q.value(5).toString());
+            *model = p;
+            uType = PARENT;
+        }
+        else if (!q.value(6).isNull())
+        {
+            ShelterOwner * o = new ShelterOwner();
+            o->setUser(u);
+            o->setId(q.value(6).toInt());
+            o->setName(q.value(7).toString());
+            o->setShelterId(q.value(8).toInt());
+            *model = o;
+            uType = SHELTER_OWNER;
+        }
+        else if (!q.value(9).isNull())
+        {
+            Administrator * a = new Administrator();
+            a->setUser(u);
+            a->setId(q.value(9).toInt());
+            a->setIsSuperAdmin(q.value(10).toBool());
+            *model = a;
+            uType = ADMINISTRATOR;
+        }
+        else
+        {
+            *err = "No matching subtype for user";
+            return false;
+        }
+
+        return true;
+    }
+
+    *err = "User not found";
+    return true;
+}
+
+void Db::foreachPet(const std::function<void(Pet &)> & func) const{
+    QSqlQuery q = db.exec("SELECT "
+                          "shelter.id, "
+                          "shelter.name, "
+                          "pet.id, "
+                          "pet.petName, "
+                          "pet.description"
+                          "FROM pets "
+                          "INNER JOIN shelter "
+                          "ON pet.shelterId = shelter.id");
+
+    while (q.next())
+    {
+        shared_ptr<Shelter> s = make_shared<Shelter>();
+        Pet p;
+
+        s->setId(q.value(0).toInt());
+        s->setName(q.value(1).toString());
+
+        p.setShelter(s);
+        p.setShelterId(s->getId());
+        p.setId(q.value(2).toInt());
+        p.setPetName(q.value(3).toString());
+        p.setDescription(q.value(4).toString());
+
+        func(p);
+    }
+}
+
+void Db::foreachPetMatch(int parentId, const std::function<void (PetMatch &)> &func, QString *err) const
+{
+    QSqlQuery q;
+    q.prepare("SELECT "
+              "petMatches.id, "
+              "petMatches.updatedAt, "
+              "petMatches.score, "
+              "pets.id, "
+              "pets.petName, "
+              "pets.description, "
+              "pets.shelterId "
+              "FROM petMatches "
+              "LEFT JOIN pets "
+              "ON petMatches.petId = pets.id "
+              "WHERE petMatches.parentId = ?");
+    q.bindValue(0, parentId);
+
+    if (!q.exec())
+    {
+        *err = q.lastError().text();
+        return;
+    }
+
+    while (q.next())
+    {
+        PetMatch m;
+        m.setId(q.value(0).toInt());
+        m.setUpdatedAt(q.value(1).toDateTime());
+        m.setScore(q.value(2).toDouble());
+
+        shared_ptr<Pet> p = make_shared<Pet>();
+        p->setId(q.value(3).toInt());
+        p->setPetName(q.value(4).toString());
+        p->setDescription(q.value(5).toString());
+        p->setShelterId(q.value(6).toInt());
+
+        m.setPet(p);
+        m.setPetId(p->getId());
+
+        func(m);
+    }
+}
+
+bool Db::getShelter(int id, Shelter &shelter, QString *err) const
+{
+    QSqlQuery q;
+    q.prepare("SELECT name FROM shelters WHERE id = ?");
+    q.bindValue(0, id);
+
+    if (!q.exec())
+    {
+        *err = q.lastError().text();
+    }
+    else if (!q.next())
+    {
+        *err = "Shelter not found";
+    }
+    else
+    {
+        shelter.setId(id);
+        shelter.setName(q.value(0).toString());
+        return true;
+    }
+
+    return false;
+}
+
+bool Db::updatePetMatches(int parentId, QString *err)
+{
+    QSqlQuery q; // TODO: Delete existing matches first maybe? Also, TEST THIS.
+    q.prepare("INSERT INTO petMatches "
+              "(parentId, updatedAt, petId, score) "
+              "SELECT :parentId, :updatedAt, pets.id, ( "
+              "SELECT AVG(attributePreferences.weight "
+              "* (petAttributes.value - attributes.offset) "
+              "/ attributes.range) AS score "
+              "FROM petAttributes "
+              "LEFT JOIN attributes "
+              "INNER JOIN attributePreferences "
+              "ON petAttributes.petId = pets.id "
+              "AND petAttributes.attributeId = attributes.id "
+              "AND attributePreferences.parentId = :parentId "
+              "AND petAttributes.attributeId = attributePreferences.attributeId "
+              ") AS score "
+              "FROM pets");
+
+    q.bindValue(":parentId", parentId);
+    q.bindValue(":updatedAt", QDateTime::currentDateTimeUtc());
+
+    if (!q.exec())
+    {
+        *err = q.lastError().text();
+        return false;
+    }
+
+    return true;
 }
 
 bool Db::createParentAndUser(Parent & p, QString * err)
@@ -264,11 +477,15 @@ bool Db::createAdministratorAndUser(Administrator &a, QString *err)
 
 bool Db::createShelterOwnerAndUser(ShelterOwner &o, QString *err)
 {
+    Shelter s;
+    if (!getShelter(o.getShelterId(), s, err))
+        return false;
+
     if (!createUser(o.getUser(), err))
         return false;
 
     QSqlQuery q;
-    q.prepare("INSERT INTO shelterOwner "
+    q.prepare("INSERT INTO shelterOwners "
               "(name, userId, shelterId) "
               "VALUES (?, ?, ?)");
     q.bindValue(0, o.getName());
@@ -300,6 +517,27 @@ bool Db::createUser(User & u, QString * err)
     if (q.exec())
     {
         u.setId(q.lastInsertId().toInt());
+        return true;
+    }
+    else if (err != nullptr)
+    {
+        *err = q.lastError().text();
+        return false;
+    }
+}
+
+bool Db::createPet(Pet & p, QString * err){
+    QSqlQuery q;
+    q.prepare("INSERT INTO pets "
+              "(name, description, shelterID) "
+              "VALUES (?, ?, ?)");
+    q.bindValue(0, p.getPetName());
+    q.bindValue(1, p.getDescription());
+    q.bindValue(2, p.getShelterId());
+
+    if (q.exec())
+    {
+        p.setId(q.lastInsertId().toInt());
         return true;
     }
     else if (err != nullptr)
@@ -353,24 +591,6 @@ bool Db::createUser(User & u, QString * err)
 //    }
 //}
 
-//bool Db::createPet(Pet & p, QString * err){
-//    QSqlQuery q;
-//    q.prepare("INSERT INTO pets "
-//              "(name, description, shelterID) "
-//              "VALUES (?, ?, ?)");
-//    q.bindValue(0, p.getPetName());
-//    q.bindValue(1, p.getDescription());
-//    q.bindValue(2, p.getShelterId());
 
-//    if (q.exec())
-//    {
-//        return true;
-//    }
-//    else if (err != nullptr)
-//    {
-//        *err = q.lastError().text();
-//        return false;
-//    }
-//}
 
 

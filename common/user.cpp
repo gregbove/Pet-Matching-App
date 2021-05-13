@@ -1,5 +1,39 @@
 #include "user.h"
 
+QString User::getTypeStr(UserType t)
+{
+    switch (t) {
+    case PARENT:
+        return "parent";
+    case SHELTER_OWNER:
+        return "shelterOwner";
+    case ADMINISTRATOR:
+        return "administrator";
+    default:
+        return QString();
+    }
+}
+
+UserType User::getType(QString t)
+{
+    t = t.toLower();
+
+    if (t.startsWith("parent"))
+    {
+        return PARENT;
+    }
+    else if (t.startsWith("shelterowner"))
+    {
+        return SHELTER_OWNER;
+    }
+    else if (t.startsWith("admin"))
+    {
+        return ADMINISTRATOR;
+    }
+
+    return INVALID_USER_TYPE;
+}
+
 User::User()
 {
     username = QString();
