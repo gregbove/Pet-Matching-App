@@ -7,6 +7,8 @@
 
 #include "user.h"
 #include "parent.h"
+#include "shelterowner.h"
+#include "administrator.h"
 #include "bnbclient.h"
 
 using namespace std;
@@ -21,12 +23,14 @@ int main(int argc, char * * argv)
 
     QObject::connect(&c, &BNBClient::getParentsFailed, [] (QString s) {
         cout << s.toStdString() << endl;
+        cout << "Get failed" << endl;
     });
 
     QObject::connect(&c, &BNBClient::getParentsSucceeded, [] (QVector<shared_ptr<Parent>> ps) {
         for (shared_ptr<Parent> p : ps)
         {
             cout << p->getName().toStdString() << endl;
+            cout << "Get Succeeded" << endl;
         }
     });
 
@@ -34,10 +38,12 @@ int main(int argc, char * * argv)
 
     QObject::connect(&c, &BNBClient::postParentFailed, [] (QString s) {
         cout << s.toStdString() << endl;
+        cout << "Post failed" << endl;
     });
 
     QObject::connect(&c, &BNBClient::postParentSucceeded, [] (const shared_ptr<Parent> p) {
         cout << p->getName().toStdString() << endl;
+        cout << "Post Succeeded" << endl;
     });
 
     User u;

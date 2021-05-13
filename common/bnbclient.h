@@ -4,6 +4,9 @@
 #include "bnbrequest.h"
 #include "bnbresponse.h"
 #include "parent.h"
+#include "pet.h"
+#include "administrator.h"
+#include "shelterowner.h"
 
 #include <memory>
 
@@ -27,6 +30,7 @@ using namespace std;
  * coorisponding responses will trigger the Failed/Succeeded signal
  * of the same name. Basically the signals are callbacks for each request.
  */
+
 class BNBClient : public QObject
 {
     Q_OBJECT
@@ -38,20 +42,51 @@ public:
      *
      * Receive the result from getParentsFailed or getParentsSucceeded
      */
+
+
     void getParents();
+    void getAdministrators();
+    void getShelterOwners();
+
+    void getPets();
 
     void postParent(Parent & p);
+    void postAdministrator(Administrator & a);
+    void postShelterOwner(ShelterOwner & s);
 
 signals:
     void getParentsFailed(QString err);
     void getParentsSucceeded(QVector<shared_ptr<Parent>> parents);
 
+    void getPetsFailed(QString err);
+    void getPetsSucceeded(QVector<shared_ptr<Pet>> pets);
+
     void postParentFailed(QString err);
     void postParentSucceeded(const shared_ptr<Parent> & parent);
+
+    void getAdministratorsFailed(QString err);
+    void getAdministratorsSucceeded(QVector<shared_ptr<Administrator>> administrators);
+
+    void postAdministratorFailed(QString err);
+    void postAdministratorSucceeded(const shared_ptr<Administrator> & administrator);
+
+    void getShelterOwnersFailed(QString err);
+    void getShelterOwnersSucceeded(QVector<shared_ptr<ShelterOwner>> shelterOwners);
+
+    void postShelterOwnerFailed(QString err);
+    void postShelterOwnerSucceeded(const shared_ptr<ShelterOwner> & shelterOwner);
 
 private slots:
     void getParentsFinish();
     void postParentFinish();
+
+    void getAdministratorsFinish();
+    void postAdministratorFinish();
+
+    void getShelterOwnersFinish();
+    void postShelterOwnerFinish();
+
+    void getPetsFinish();
 
 private:
     QUrl base;

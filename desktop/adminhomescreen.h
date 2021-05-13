@@ -2,6 +2,9 @@
 #define ADMINHOMESCREEN_H
 
 #include <QWidget>
+#include <QtSql>
+#include <QSqlDatabase>
+#include "adminparentsscreen.h"
 
 namespace Ui {
 class AdminHomeScreen;
@@ -21,8 +24,14 @@ signals:
 private slots:
     void on_homeButton_clicked();
 
+    void goToAdminHomeScreen();
+
+    void on_parentsButton_clicked();
+
 private:
     Ui::AdminHomeScreen *ui;
+
+    AdminParentsScreen aParentsScreen;
 };
 
 #endif // ADMINHOMESCREEN_H

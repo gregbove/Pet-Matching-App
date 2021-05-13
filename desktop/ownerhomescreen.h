@@ -2,7 +2,8 @@
 #define OWNERHOMESCREEN_H
 
 #include <QWidget>
-#include <enteranimalscreen.h>
+#include "enteranimalscreen.h"
+#include "owneranimalsscreen.h"
 
 namespace Ui {
 class OwnerHomeScreen;
@@ -15,6 +16,10 @@ class OwnerHomeScreen : public QWidget
 public:
     explicit OwnerHomeScreen(QWidget *parent = 0);
     ~OwnerHomeScreen();
+
+    int type = 0;
+
+    int num = 0;
 
 signals:
     void LogOutClicked();
@@ -33,10 +38,10 @@ private slots:
     void on_viewAllAnimals_clicked();
 
 private:
-    int type = 0;
     Ui::OwnerHomeScreen *ui;
 
     EnterAnimalScreen eAnimalScreen;
+    OwnerAnimalsScreen oAnimalScreen;
 };
 
 #endif // OWNERHOMESCREEN_H

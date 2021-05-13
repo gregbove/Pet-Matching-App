@@ -15,6 +15,20 @@ public:
     explicit EnterAnimalScreenGeneral(QWidget *parent = 0);
     ~EnterAnimalScreenGeneral();
 
+    QString theAnimal;
+
+    void setupScreen(QString a);
+
+signals:
+    void Back();
+
+    void Done();
+
+private slots:
+    void on_backButton_clicked();
+
+    void on_enterButton_clicked();
+
 private:
     Ui::EnterAnimalScreenGeneral *ui;
 };

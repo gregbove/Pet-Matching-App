@@ -6,6 +6,10 @@ UserHomeScreen::UserHomeScreen(QWidget *parent) :
     ui(new Ui::UserHomeScreen)
 {
     ui->setupUi(this);
+
+    QGridLayout *grid = new QGridLayout;
+    QPushButton *p = new QPushButton(tr("Button"));
+    grid->addWidget(p);
 }
 
 UserHomeScreen::~UserHomeScreen()
@@ -23,6 +27,7 @@ void UserHomeScreen::on_setPreferencesButton_clicked()
     type = 1;
     ui->stackedWidget->addWidget(&uPreferencesScreen);
     connect(&uPreferencesScreen, SIGNAL(Back()), this, SLOT(back()));
+    connect(&uPreferencesScreen, SIGNAL(Done()), this, SLOT(back()));
 
     ui->stackedWidget->setCurrentIndex(1);
 }

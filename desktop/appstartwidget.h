@@ -2,10 +2,11 @@
 #define APPSTARTWIDGET_H
 
 #include <QWidget>
-#include <userhomescreen.h>
-#include <ownerhomescreen.h>
-#include <adminhomescreen.h>
-#include <createaccountscreen.h>
+#include "../common/bnbclient.h"
+#include "userhomescreen.h"
+#include "ownerhomescreen.h"
+#include "adminhomescreen.h"
+#include "createaccountscreen.h"
 
 namespace Ui {
 class AppStartWidget;

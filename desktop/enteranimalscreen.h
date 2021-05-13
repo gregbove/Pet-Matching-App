@@ -2,6 +2,8 @@
 #define ENTERANIMALSCREEN_H
 
 #include <QWidget>
+#include "enteranimalscreengeneral.h"
+#include "enteranimalscreennew.h"
 
 namespace Ui {
 class EnterAnimalScreen;
@@ -38,8 +40,11 @@ private:
     int type = 0;
 
     Ui::EnterAnimalScreen *ui;
+
+    EnterAnimalScreenGeneral generalScreen;
+    EnterAnimalScreenNew newScreen;
     
-    QString animalType;
+    QString animalTypeS;
 };
 
 #endif // ENTERANIMALSCREEN_H

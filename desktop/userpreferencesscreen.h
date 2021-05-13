@@ -2,6 +2,7 @@
 #define USERPREFERENCESSCREEN_H
 
 #include <QWidget>
+#include "userpreferencesscreen2.h"
 
 namespace Ui {
 class UserPreferencesScreen;
@@ -18,11 +19,23 @@ public:
 signals:
     void Back();
 
+    void Done();
+
 private slots:
     void on_backButton_clicked();
 
+    void on_nextButton_clicked();
+
+    void back();
+
+    void done();
+
+    void on_animalList_clicked(const QModelIndex &index);
+
 private:
     Ui::UserPreferencesScreen *ui;
+
+    UserPreferencesScreen2 uPreferencesScreen2;
 };
 
 #endif // USERPREFERENCESSCREEN_H

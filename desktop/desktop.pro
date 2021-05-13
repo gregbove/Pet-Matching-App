@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui
+QT       += core gui sql network
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -34,7 +34,28 @@ SOURCES += \
     userpreferencesscreen.cpp \
     usersearchscreen.cpp \
     enteranimalscreengeneral.cpp \
-    enteranimalscreennew.cpp
+    enteranimalscreennew.cpp \
+    userpreferencesscreen2.cpp \
+    adminparentsscreen.cpp \
+    ../common/administrator.cpp \
+    ../common/attribute.cpp \
+    ../common/attributepreference.cpp \
+    ../common/bnbmodel.cpp \
+    ../common/pet.cpp \
+    ../common/petadoption.cpp \
+    ../common/petattribute.cpp \
+    ../common/petmatch.cpp \
+    ../common/petwatch.cpp \
+    ../common/shelter.cpp \
+    ../common/shelterowner.cpp \
+    ../common/user.cpp \
+    ../common/bnbresponse.cpp \
+    ../common/jsonserializable.cpp \
+    ../common/parent.cpp \
+    ../common/bnbrequest.cpp \
+    ../common/bnbclient.cpp \
+    owneranimalsscreen.cpp
+
 
 HEADERS += \
         appstartwidget.h \
@@ -46,7 +67,27 @@ HEADERS += \
     userpreferencesscreen.h \
     usersearchscreen.h \
     enteranimalscreengeneral.h \
-    enteranimalscreennew.h
+    enteranimalscreennew.h \
+    userpreferencesscreen2.h \
+    adminparentsscreen.h \
+    ../common/administrator.h \
+    ../common/attribute.h \
+    ../common/attributepreference.h \
+    ../common/bnbmodel.h \
+    ../common/pet.h \
+    ../common/petadoption.h \
+    ../common/petattribute.h \
+    ../common/petmatch.h \
+    ../common/petwatch.h \
+    ../common/shelter.h \
+    ../common/shelterowner.h \
+    ../common/user.h \
+    ../common/bnbresponse.h \
+    ../common/jsonserializable.h \
+    ../common/parent.h \
+    ../common/bnbrequest.h \
+    ../common/bnbclient.h \
+    owneranimalsscreen.h
 
 FORMS += \
         appstartwidget.ui \
@@ -58,4 +99,7 @@ FORMS += \
     userpreferencesscreen.ui \
     usersearchscreen.ui \
     enteranimalscreengeneral.ui \
-    enteranimalscreennew.ui
+    enteranimalscreennew.ui \
+    userpreferencesscreen2.ui \
+    adminparentsscreen.ui \
+    owneranimalsscreen.ui

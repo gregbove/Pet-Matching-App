@@ -23,9 +23,17 @@ void AppStartWidget::on_loginButton_clicked()
     }
 
     else if (ui->usernameLine->text() == "Owner") {
-        type = 2;
-        ui->stackedWidget->addWidget(&oHomeScreen);
-        connect(&oHomeScreen, SIGNAL(LogOutClicked()), this, SLOT(goToHomeScreen()));
+        QString s = ui->passwordLine->text();
+        bool ok;
+        int num = s.toInt(&ok);
+        if (!ok) {
+            // conversion failed
+        } else {
+            type = 2;
+            ui->stackedWidget->addWidget(&oHomeScreen);
+            oHomeScreen.num = num;
+            connect(&oHomeScreen, SIGNAL(LogOutClicked()), this, SLOT(goToHomeScreen()));
+        }
     }
 
     else if (ui->usernameLine->text() == "Admin") {

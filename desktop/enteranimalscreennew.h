@@ -15,6 +15,16 @@ public:
     explicit EnterAnimalScreenNew(QWidget *parent = 0);
     ~EnterAnimalScreenNew();
 
+signals:
+    void Back();
+
+    void Done();
+
+private slots:
+    void on_backButton_clicked();
+
+    void on_enterButton_clicked();
+
 private:
     Ui::EnterAnimalScreenNew *ui;
 };

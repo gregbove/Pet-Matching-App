@@ -32,7 +32,6 @@ private slots:
 private:
     int type = 0;
     Ui::UserHomeScreen *ui;
-
     UserPreferencesScreen uPreferencesScreen;
     UserSearchScreen uSearchScreen;
 };
