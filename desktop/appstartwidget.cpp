@@ -3,7 +3,7 @@
 
 AppStartWidget::AppStartWidget(QWidget *parent) :
     QWidget(parent),
-    bnb(QString::fromStdString("http://localhost:1312")),
+    bnb(QString::fromStdString(BNB_SERVER_URL)),
     ui(new Ui::AppStartWidget)
 {
     ui->setupUi(this);

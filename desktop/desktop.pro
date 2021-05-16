@@ -87,7 +87,8 @@ HEADERS += \
     ../common/parent.h \
     ../common/bnbrequest.h \
     ../common/bnbclient.h \
-    owneranimalsscreen.h
+    owneranimalsscreen.h \
+    constants.h
 
 FORMS += \
         appstartwidget.ui \

@@ -1,6 +1,8 @@
 #ifndef APPSTARTWIDGET_H
 #define APPSTARTWIDGET_H
 
+#include "constants.h"
+
 #include <QWidget>
 #include <QMessageBox>
 
