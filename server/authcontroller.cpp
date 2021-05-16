@@ -18,9 +18,6 @@ void AuthController::postHandler(const shared_ptr<Session> session)
 
     size_t contentLen = session->get_request()->get_header("Content-Length", 0);
 
-    BNBResponse res;
-    int statusCode = restbed::INTERNAL_SERVER_ERROR;
-
     session->fetch(contentLen, [&](const shared_ptr<Session> session, const Bytes & body)
     {
         QByteArray reqBytes((char *) body.data(), body.size());
@@ -28,6 +25,8 @@ void AuthController::postHandler(const shared_ptr<Session> session)
         QJsonParseError parseError;
         QJsonDocument reqBody = QJsonDocument::fromJson(reqBytes, &parseError);
 
+        BNBResponse res;
+        int statusCode = restbed::INTERNAL_SERVER_ERROR;
         if (reqBody.isObject())
         {
             BNBRequest req;
@@ -72,6 +71,8 @@ void AuthController::postHandler(const shared_ptr<Session> session)
                         res.setError("Invalid username or password");
                         statusCode = restbed::UNAUTHORIZED;
                     }
+
+                    delete m;
                 }
                 else
                 {
@@ -83,6 +84,8 @@ void AuthController::postHandler(const shared_ptr<Session> session)
             {
                 res.setError(err);
             }
+
+            delete u;
         }
         else if (reqBody.isNull())
         {
@@ -99,6 +102,7 @@ void AuthController::postHandler(const shared_ptr<Session> session)
         res.toJson(resObj);
 
         const string resStr = QJsonDocument(resObj).toJson().toStdString();
+        //delete res;
 
         session->close(statusCode, resStr, {
                            { "Content-Type", "application/json" },
