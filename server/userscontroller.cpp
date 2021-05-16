@@ -103,9 +103,6 @@ void UsersController::postHandler(const shared_ptr<Session> session)
     size_t contentLen = session->get_request()->
             get_header("Content-Length", 0);
 
-    BNBResponse res;
-    int statusCode = restbed::INTERNAL_SERVER_ERROR;
-
     session->fetch(contentLen, [&](const shared_ptr<Session> session, const Bytes & body)
     {
         QByteArray reqBytes((char *) body.data(), body.size());
@@ -113,6 +110,8 @@ void UsersController::postHandler(const shared_ptr<Session> session)
         QJsonParseError parseError;
         QJsonDocument reqBody = QJsonDocument::fromJson(reqBytes, &parseError);
 
+        BNBResponse res;
+        int statusCode = restbed::INTERNAL_SERVER_ERROR;
         if (reqBody.isObject())
         {
             BNBRequest req;
